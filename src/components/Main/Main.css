@@ -1,0 +1,19 @@
+@font-face {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    src: url('../../vendor/fonts/CabinetGrotesk-Regular.woff') format('woff');
+    font-weight: 700;
+}
+
+.cards__list{
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    gap: 21px;    
+}
+
+.cards__text{
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 700;
+}

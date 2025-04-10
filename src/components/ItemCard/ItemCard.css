@@ -1,0 +1,31 @@
+@font-face {
+    font-family: 'Cabinet Grotesk';
+    src: url('../../vendor/fonts/CabinetGrotesk-Regular.woff') format('woff');
+}
+
+.card{
+    display: flex;
+    width: 323px;
+    position: relative;
+    justify-content: center;
+}
+
+.card__name{
+    font-family: 'Cabinet Grotesk', sans-serif;
+    position: absolute;
+    top: 15px;
+    margin: 0;
+    padding: 2px 12px;  
+    border: 1px solid rgba(0, 0, 0, 0.3);  
+    border-radius: 4px; 
+    background-color: #fff;
+}
+
+.card__image{
+    width: 100%;
+    border: 1px solid #0000004D;
+    border-radius: 12px;
+}
+
+
+

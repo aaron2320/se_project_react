@@ -1,0 +1,25 @@
+@font-face {
+    font-family: 'Cabinet Grotesk';
+    src: url(../../vendor/fonts/CabinetGrotesk-Regular.woff2) format('woff2'),
+         url(../../vendor/fonts/CabinetGrotesk-Regular.woff) format('woff');
+}
+
+.footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0 40px;
+    margin-top: auto;
+    font-family: 'Cabinet Grotesk', sans-serif;
+}
+
+
+
+.footer__text{
+    margin: 0;
+
+}
+
+
+
+
