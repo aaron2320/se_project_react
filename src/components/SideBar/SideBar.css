@@ -1,0 +1,27 @@
+@font-face {
+  font-family: "Cabinet Grotesk";
+  src: url("../../vendor/fonts/CabinetGrotesk-Regular.woff") format("woff");
+}
+
+.sidebar {
+  display: flex !important; /* Increase specificity to prevent overrides */
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 16px;
+  min-width: 200px;
+}
+
+.sidebar__avatar {
+  width: 50px; /* Ensure the avatar has a defined size */
+  height: 50px;
+  border-radius: 50%;
+}
+
+.sidebar__username {
+  font-family: "Cabinet Grotesk", "Arial", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: 0%;
+}

@@ -1,25 +1,38 @@
-@font-face {
-    font-family: 'Cabinet Grotesk';
-    src: url(../../vendor/fonts/CabinetGrotesk-Regular.woff2) format('woff2'),
-         url(../../vendor/fonts/CabinetGrotesk-Regular.woff) format('woff');
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0 40px;
+  margin-top: auto;
+  font-family: "Cabinet Grotesk", sans-serif;
 }
 
-.footer{
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 0 40px;
-    margin-top: auto;
-    font-family: 'Cabinet Grotesk', sans-serif;
+.footer__text {
+  margin: 0;
 }
 
+/* Tablet view (768px - 1023px) */
+@media (max-width: 1023px) {
+  .footer {
+    padding: 0 20px;
+  }
 
-
-.footer__text{
-    margin: 0;
-
+  .footer__text {
+    font-size: 14px;
+  }
 }
 
+/* Mobile view (≤ 767px) */
+@media (max-width: 767px) {
+  .footer {
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 16px;
+    align-items: center;
+    text-align: center;
+  }
 
-
-
+  .footer__text {
+    font-size: 12px;
+  }
+}

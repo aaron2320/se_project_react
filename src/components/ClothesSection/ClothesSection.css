@@ -1,0 +1,59 @@
+.clothes-section__add-item {
+  display: flex;
+  align-items: center; /* Vertically center the text */
+  gap: 20px;
+  font-family: "Cabinet Grotesk", "Arial", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px; /* Match Figma design */
+  letter-spacing: 0%;
+}
+
+.clothes-section__button {
+  background: none; /* Remove default button background */
+  border: none; /* Already set, but kept for clarity */
+  padding: 0; /* Remove default padding */
+  font-family: "Cabinet Grotesk", "Arial", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px; /* Match Figma design */
+  letter-spacing: 0%;
+  color: rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  appearance: none; /* Remove browser-specific button styling */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.clothes-section__button:hover {
+  color: #ff4d00; /* Red color on hover, matching "Delete item" for consistency */
+  text-decoration: underline; /* Optional: Add underline on hover */
+}
+
+/* Tablet view (768px - 1023px) */
+@media (max-width: 1023px) {
+  .clothes-section__add-item {
+    gap: 16px;
+    font-size: 18px;
+    line-height: 22px; /* Adjust proportionally */
+  }
+
+  .clothes-section__button {
+    font-size: 18px;
+    line-height: 22px;
+  }
+}
+
+/* Mobile view (≤ 767px) */
+@media (max-width: 767px) {
+  .clothes-section__add-item {
+    gap: 12px;
+    font-size: 16px;
+    line-height: 20px; /* Adjust proportionally */
+  }
+
+  .clothes-section__button {
+    font-size: 16px;
+    line-height: 20px;
+  }
+}

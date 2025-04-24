@@ -1,0 +1,54 @@
+.modal__label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 25px; /* Increased spacing to match Figma */
+  font-family: "Cabinet Grotesk", "Arial", sans-serif;
+  font-size: 16px; /* UI text style 2 */
+  font-weight: 500; /* Medium */
+}
+
+.modal__input {
+  border: none;
+  border-bottom: 1px solid #000; /* Ensure black underline by default */
+  padding: 5px 0;
+  font-size: 16px;
+  font-family: "Cabinet Grotesk", "Arial", sans-serif;
+}
+
+.modal__input_invalid {
+  border-bottom: 1px solid red; /* Red underline only when invalid after submission */
+}
+
+.modal__radio-buttons {
+  margin-bottom: 25px; /* Increased spacing to match Figma */
+}
+
+.modal__legend {
+  font-family: "Cabinet Grotesk", "Arial", sans-serif;
+  font-size: 16px; /* UI text style 2 */
+  font-weight: 500; /* Medium */
+  margin-bottom: 10px;
+}
+
+.modal__radio-button {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* Increased spacing between radio buttons */
+}
+
+.modal__radio-input {
+  margin-right: 10px;
+}
+
+.modal__radio-label {
+  font-family: "Cabinet Grotesk", "Arial", sans-serif;
+  font-size: 16px; /* UI text style 2 */
+  font-weight: 500; /* Medium */
+}
+
+.modal__error {
+  color: red;
+  font-family: "Cabinet Grotesk", "Arial", sans-serif;
+  font-size: 14px;
+  margin-top: 5px;
+}
