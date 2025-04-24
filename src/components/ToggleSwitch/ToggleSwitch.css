@@ -1,0 +1,64 @@
+.toggle-switch {
+  width: 56px;
+  height: 28px;
+  border: 2px solid black;
+  border-radius: 20px;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  display: inline-block;
+}
+
+.toggle-switch__checkbox {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.toggle-switch__circle {
+  background-color: black;
+  width: 28px;
+  height: 28px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  transition: all 0.5s ease;
+  z-index: 1;
+}
+
+/* Text styles */
+.toggle-switch__text_F,
+.toggle-switch__text_C {
+  color: gray;
+  position: absolute;
+  top: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 2;
+  transition: color 0.3s ease;
+}
+
+.toggle-switch__text_F {
+  left: 9px;
+}
+
+.toggle-switch__text_C {
+  right: 9px;
+}
+
+/* Move the circle to the right when checked */
+.toggle-switch__checkbox:checked ~ .toggle-switch__circle {
+  left: 28px;
+}
+
+/* Highlight "F" when unchecked (circle on the left) */
+.toggle-switch__checkbox:not(:checked) ~ .toggle-switch__text_F {
+  color: white;
+}
+
+/* Highlight "C" when checked (circle on the right) */
+.toggle-switch__checkbox:checked ~ .toggle-switch__text_C {
+  color: white;
+}

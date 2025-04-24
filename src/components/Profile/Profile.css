@@ -1,0 +1,30 @@
+.profile {
+  display: flex;
+  gap: 116px;
+  /* Remove white-space as it's not needed for flex layout; if intended to prevent wrapping, use flex-wrap on children */
+}
+
+/* Ensure profile__sidebar doesn't constrain its children too much */
+.profile__sidebar {
+  min-width: 220px; /* Ensure enough space for the sidebar content */
+}
+
+/* Tablet view (768px - 1023px) */
+@media (max-width: 1023px) {
+  .profile {
+    gap: 40px;
+  }
+}
+
+/* Mobile view (≤ 767px) */
+@media (max-width: 767px) {
+  .profile {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .profile__sidebar {
+    min-width: unset; /* Allow sidebar to take full width on mobile */
+    width: 100%;
+  }
+}

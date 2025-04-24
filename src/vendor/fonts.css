@@ -1,0 +1,5 @@
+/* src/vendor/fonts/fonts.css */
+@font-face {
+  font-family: "Cabinet Grotesk";
+  src: url(src/vendpr/font/CabinetGrotesk-Regular.woff) format("woff");
+}

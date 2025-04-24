@@ -1,32 +1,53 @@
-@font-face {
-    font-family: 'Cabinet Grotesk';
-    src: url('../../vendor/fonts/CabinetGrotesk-Regular.woff') format('woff');
+.weather-card {
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-weight: 700;
+  position: relative;
+  display: flex;
+  height: 80px;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-.weather-card{
-    font-family: 'Cabinet Grotesk', sans-serif;
-    font-weight: 700;
-    position: relative;
-    display: flex;
-    height: 80px;
-    border-radius: 12px;
-    overflow: hidden;
+.weather-card__temp {
+  position: absolute;
+  margin: 0;
+  font-size: 36px;
+  line-height: 40px;
+  top: 20px;
+  left: 16px;
+  color: #fff;
 }
 
-
-.weather-card__temp{
-    position: absolute;
-    margin: 0;
-    font-size: 36px;
-    line-height: 40px;
-    top: 20px;
-    left: 16px;
-    color: #fff;
-    
+.weather-card__img {
+  object-fit: cover;
+  object-position: right top;
+  width: 100%;
 }
 
-.weather-card__img{
-    object-fit: cover;
-    object-position: right top;
-    width: 100%;
+/* Tablet view (768px - 1023px) */
+@media (max-width: 1023px) {
+  .weather-card {
+    height: 70px;
+  }
+
+  .weather-card__temp {
+    font-size: 32px;
+    line-height: 36px;
+    top: 16px;
+    left: 12px;
+  }
+}
+
+/* Mobile view (≤ 767px) */
+@media (max-width: 767px) {
+  .weather-card {
+    height: 60px;
+  }
+
+  .weather-card__temp {
+    font-size: 28px;
+    line-height: 32px;
+    top: 14px;
+    left: 10px;
+  }
 }
