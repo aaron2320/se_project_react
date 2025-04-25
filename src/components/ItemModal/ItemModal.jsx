@@ -1,6 +1,30 @@
+import { useRef, useEffect } from "react";
+import { useEscapeClose } from "../../Hooks/useEscapeClose";
 import "./ItemModal.css";
 
-function ItemModal({ card, onClose, handleDelete, isOpen, modalRef }) {
+function ItemModal({ card, onClose, handleDelete, isOpen }) {
+  const modalRef = useRef(null);
+
+  // Close on ESC key
+  useEscapeClose(isOpen, onClose, modalRef);
+
+  // Close on click outside
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (modalRef.current && !modalRef.current.contains(e.target)) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [isOpen, onClose]);
+
   const handleDeleteClick = () => {
     handleDelete(card);
   };
