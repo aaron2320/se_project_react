@@ -104,7 +104,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (activeModal !== "add-garment") return;
+    if (!activeModal) return;
 
     const handleClickOutside = (e) => {
       if (

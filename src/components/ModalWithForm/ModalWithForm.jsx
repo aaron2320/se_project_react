@@ -1,4 +1,5 @@
 import "./ModalWithForm.css";
+import { useEscapeClose } from "../../Hooks/useEscapeClose";
 
 function ModalWithForm({
   title,
@@ -10,7 +11,9 @@ function ModalWithForm({
   modalRef,
   isDisabled,
 }) {
-  const handleButtonClick = (e) => {
+  useEscapeClose(isOpen, onClose, modalRef);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!isDisabled && onSubmit) {
       onSubmit(e);
@@ -29,14 +32,10 @@ function ModalWithForm({
         >
           ✕
         </button>
-        <form className="modal__form">
+
+        <form className="modal__form" onSubmit={handleSubmit}>
           {children}
-          <button
-            type="button"
-            className="modal__submit"
-            disabled={isDisabled}
-            onClick={handleButtonClick}
-          >
+          <button type="submit" className="modal__submit" disabled={isDisabled}>
             {buttonText}
           </button>
         </form>
