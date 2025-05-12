@@ -1,43 +1,14 @@
-@font-face {
-  font-family: "Cabinet Grotesk";
-  src: url(/fonts/CabinetGrotesk-Regular.woff) format("woff");
-}
-
-body {
-  font-family: "Cabinet Grotesk", "Arial", sans-serif;
-}
-
 .page {
   background-color: #f3f3f3;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
 .page__content {
   max-width: 1360px;
-  padding: 0 40px;
-  margin: 0 auto;
-  width: 100%;
-  box-sizing: border-box;
-  flex: 1; /* Ensures content takes up available space, pushing footer to bottom */
+  max-width: 100%;
+  padding: 0 40px 0 40px;
 }
-
-/* Tablet view (768px - 1023px) */
-@media (max-width: 1023px) {
+@media screen and (max-width: 375px) {
   .page__content {
-    padding: 0 20px;
+    padding: 0 16px 0 16px;
   }
-}
-
-/* Mobile view (≤ 767px) */
-@media (max-width: 767px) {
-  .page__content {
-    padding: 0 16px;
-  }
-}
-
-.page__main {
-  gap: 20px;
-  padding: 20px;
 }

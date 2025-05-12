@@ -1,18 +1,38 @@
-import ClothesSection from "../ClothesSection/ClothesSection";
-import SideBar from "../SideBar/SideBar";
 import "./Profile.css";
+import SideBar from "../SideBar/SideBar";
+import ClothesSection from "../ClothesSection/ClothesSection";
+import { useContext } from "react";
+import AppContext from "../../contexts/AppContext";
 
-function Profile({ handleAddClick, onCardClick, clothingItems }) {
+function Profile({
+  onCardClick,
+  clothingItems,
+  handleAddClick,
+  handleCardLike,
+  handleEditProfileClick,
+  weatherData,
+  getWeatherSuggestions,
+}) {
+  const { currentTemperatureUnit } = useContext(AppContext);
+  const suggestedItems = getWeatherSuggestions(weatherData, clothingItems);
+
+  // Debug log to track items passed to ClothesSection
+  console.log("Profile - Clothing Items:", clothingItems);
+  console.log("Profile - Suggested Items:", suggestedItems);
+
   return (
     <div className="profile">
       <section className="profile__sidebar">
-        <SideBar />
+        <SideBar handleEditProfileClick={handleEditProfileClick} />
       </section>
       <section className="profile__clothing-items">
         <ClothesSection
-          handleAddClick={handleAddClick}
           onCardClick={onCardClick}
           clothingItems={clothingItems}
+          handleAddClick={handleAddClick}
+          handleCardLike={handleCardLike}
+          suggestedItems={suggestedItems}
+          weatherData={weatherData}
         />
       </section>
     </div>

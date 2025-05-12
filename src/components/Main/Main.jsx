@@ -1,38 +1,52 @@
 import { useContext } from "react";
 import WeatherCard from "../WeatherCard/WeatherCard";
 import ItemCard from "../ItemCard/ItemCard";
-import CurrentTemperatureUnitContext from "../../contexts/CurrentTemperatureUnitContext";
 import "./Main.css";
+import AppContext from "../../contexts/AppContext";
 
-function Main({ weatherData, handleCardClick, clothingItems }) {
-  const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext);
+function Main({
+  weatherData,
+  handleCardClick,
+  clothingItems,
+  handleCardLike,
+  suggestedItems,
+}) {
+  const { currentTemperatureUnit } = useContext(AppContext);
+
+  // Default message if weatherData isn't loaded
+  const tempDisplay = weatherData?.temp
+    ? weatherData.temp[currentTemperatureUnit]
+    : "N/A";
+  const typeDisplay = weatherData?.type || "unknown";
+
+  // Log for debugging
+  console.log("Weather Data:", weatherData);
+  console.log("Clothing Items:", clothingItems);
+  console.log("Suggested Items:", suggestedItems);
 
   return (
     <main>
-      <WeatherCard
-        temp={weatherData.temp}
-        isDay={weatherData.isDay}
-        condition={weatherData.condition}
-      />
+      <WeatherCard weatherData={weatherData} />
       <section className="cards">
         <p className="cards__text">
-          Today is {weatherData.temp[currentTemperatureUnit]}°{" "}
-          {currentTemperatureUnit} / You may want to wear:
+          Today is {tempDisplay}°{currentTemperatureUnit} / You may want to
+          wear:
         </p>
         <ul className="cards__list">
-          {clothingItems
-            .filter((item) => {
-              return item.weather === weatherData.type;
-            })
-            .map((item) => {
-              return (
-                <ItemCard
-                  item={item}
-                  key={item._id}
-                  onCardClick={handleCardClick}
-                />
-              );
-            })}
+          {suggestedItems.length > 0 ? (
+            suggestedItems.map((item) => (
+              <ItemCard
+                key={item._id}
+                item={item}
+                onCardClick={handleCardClick}
+                handleCardLike={handleCardLike}
+              />
+            ))
+          ) : (
+            <li className="cards__no-items">
+              No suggested items for this weather type.
+            </li>
+          )}
         </ul>
       </section>
     </main>

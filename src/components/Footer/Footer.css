@@ -1,38 +1,21 @@
 .footer {
+  font-family: CabinetGrotesk, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  padding: 0 40px;
-  margin-top: auto;
-  font-family: "Cabinet Grotesk", sans-serif;
+
+  padding: 171px 0 24px 0;
+  align-items: center;
 }
 
-.footer__text {
-  margin: 0;
+.footer-title {
+  display: block;
 }
 
-/* Tablet view (768px - 1023px) */
-@media (max-width: 1023px) {
+@media screen and (max-width: 375px) {
   .footer {
-    padding: 0 20px;
-  }
-
-  .footer__text {
-    font-size: 14px;
-  }
-}
-
-/* Mobile view (≤ 767px) */
-@media (max-width: 767px) {
-  .footer {
-    flex-direction: column;
-    gap: 8px;
-    padding: 0 16px;
-    align-items: center;
-    text-align: center;
-  }
-
-  .footer__text {
-    font-size: 12px;
+    padding: 83px 0 24px 0;
   }
 }

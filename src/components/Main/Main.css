@@ -1,119 +1,44 @@
+.cards {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  max-width: 100%;
+}
 .cards__list {
+  list-style-type: none;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(325px, 1fr));
-  gap: 15px;
-  justify-content: center;
+  grid-gap: 20px 20px;
+  grid-template-columns: repeat(auto-fit, 323px);
+  grid-template-rows: auto;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  list-style-type: none;
-  width: 100%;
-  box-sizing: border-box;
-  max-width: 1005px;
-  margin: 0 auto;
-}
-
-.card {
-  width: 100%;
-  height: 328px;
-  box-sizing: border-box;
-  background-color: white;
-  border-radius: 10px;
-  overflow: hidden;
-  cursor: pointer;
-  position: relative;
-  display: block;
-}
-
-.card__image {
-  width: 100%;
-  height: 100%; /* Fill the entire card height */
-  object-fit: cover;
-  display: block;
-  position: absolute;
-  top: 0; /* Start at the top */
-  left: 0;
-}
-
-.card__name {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  width: fit-content;
-  box-sizing: border-box;
-  z-index: 1; /* Ensure the name is above the image */
+  justify-content: center;
 }
 
 .cards__text {
-  font-family: "Cabinet Grotesk", sans-serif;
+  display: flex;
+  font-family: CabinetGrotesk, sans-serif;
   font-weight: 700;
+  font-size: 20px;
+  line-height: 24.8px;
 }
 
-/* Tablet view (768px - 1023px) */
-@media (max-width: 1023px) {
+@media screen and (max-width: 375px) {
   .cards__list {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px;
-    max-width: none;
+    padding: 0;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 16px 15px;
+    padding-bottom: 20px;
+    margin: 0 auto;
   }
-
   .cards__text {
-    font-size: 18px;
-  }
-
-  .card {
     width: 100%;
-    height: 260px;
+    margin: 32px 0 20px 0;
+    padding: 0;
+    white-space: nowrap;
   }
-
-  .card__image {
-    height: 100%;
-    top: 0;
-  }
-
-  .card__name {
-    top: 8px;
-    padding: 4px 8px;
-    font-size: 14px;
-  }
-}
-
-/* Mobile view (≤ 767px) */
-@media (max-width: 767px) {
-  .cards__list {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    max-width: none;
-  }
-
-  .cards__text {
-    font-size: 16px;
-  }
-
-  .card {
-    width: 100%;
-    height: 300px;
-  }
-
-  .card__image {
-    height: 100%;
-    top: 0;
-  }
-
-  .card__name {
-    top: 10px;
-    padding: 5px 10px;
-    font-size: 16px;
-  }
-}
-
-/* Prevent horizontal scrollbar on the body */
-body {
-  overflow-x: hidden;
 }

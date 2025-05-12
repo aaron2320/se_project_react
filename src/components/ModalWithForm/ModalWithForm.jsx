@@ -1,43 +1,38 @@
 import "./ModalWithForm.css";
-import { useEscapeClose } from "../../Hooks/useEscapeClose";
+import useModalClose from "../../utils/closeModalHook";
 
 function ModalWithForm({
-  title,
   children,
-  onClose,
-  isOpen,
-  onSubmit,
   buttonText,
-  modalRef,
-  isDisabled,
+  buttonWidthStyle,
+  title,
+  isOpen,
+  onClose,
+  onSubmit,
+  alternativeAction,
+  isValid,
 }) {
-  useEscapeClose(isOpen, onClose, modalRef);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!isDisabled && onSubmit) {
-      onSubmit(e);
-    }
-  };
+  useModalClose(isOpen, onClose);
 
   return (
     <div className={`modal ${isOpen ? "modal_opened" : ""}`}>
-      <div className="modal__content" ref={modalRef}>
+      <div className="modal__container">
         <h2 className="modal__title">{title}</h2>
-        <button
-          onClick={onClose}
-          type="button"
-          className="modal__close"
-          aria-label="close"
-        >
-          ✕
-        </button>
+        <form onSubmit={onSubmit} className="modal__form" noValidate>
+          <button type="button" className="modal__close" onClick={onClose} />
 
-        <form className="modal__form" onSubmit={handleSubmit}>
           {children}
-          <button type="submit" className="modal__submit" disabled={isDisabled}>
-            {buttonText}
-          </button>
+          <div className="modal__button-container">
+            <button
+              type="submit"
+              className="modal__submit-btn"
+              disabled={!isValid}
+              style={buttonWidthStyle}
+            >
+              {buttonText}
+            </button>
+            {alternativeAction}
+          </div>
         </form>
       </div>
     </div>

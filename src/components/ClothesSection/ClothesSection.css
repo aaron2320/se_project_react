@@ -1,59 +1,72 @@
-.clothes-section__add-item {
+.clothes-items-menu {
   display: flex;
-  align-items: center; /* Vertically center the text */
   gap: 20px;
-  font-family: "Cabinet Grotesk", "Arial", sans-serif;
+  font-family: CabinetGrotesk, sans-serif;
   font-weight: 700;
   font-size: 20px;
-  line-height: 24px; /* Match Figma design */
-  letter-spacing: 0%;
+  line-height: 100%;
+  color: #000000;
 }
 
-.clothes-section__button {
-  background: none; /* Remove default button background */
-  border: none; /* Already set, but kept for clarity */
-  padding: 0; /* Remove default padding */
-  font-family: "Cabinet Grotesk", "Arial", sans-serif;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 24px; /* Match Figma design */
-  letter-spacing: 0%;
-  color: rgba(0, 0, 0, 0.6);
+.clothes-items-menu_btn {
   cursor: pointer;
-  appearance: none; /* Remove browser-specific button styling */
-  -webkit-appearance: none;
-  -moz-appearance: none;
+  border: none;
+  font-family: CabinetGrotesk, sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 100%;
+  opacity: 60%;
+  color: #00000099;
 }
 
-.clothes-section__button:hover {
-  color: #ff4d00; /* Red color on hover, matching "Delete item" for consistency */
-  text-decoration: underline; /* Optional: Add underline on hover */
+.clothes-section__list {
+  list-style-type: none;
+  display: grid;
+  grid-gap: 20px 20px;
+  grid-template-columns: repeat(auto-fit, minmax(323px, 1fr));
+  grid-template-rows: auto;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  max-width: 100%;
 }
 
-/* Tablet view (768px - 1023px) */
-@media (max-width: 1023px) {
-  .clothes-section__add-item {
-    gap: 16px;
-    font-size: 18px;
-    line-height: 22px; /* Adjust proportionally */
-  }
-
-  .clothes-section__button {
-    font-size: 18px;
-    line-height: 22px;
-  }
+.clothes-section__weather {
+  margin: 20px 0;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
 }
 
-/* Mobile view (≤ 767px) */
-@media (max-width: 767px) {
-  .clothes-section__add-item {
-    gap: 12px;
-    font-size: 16px;
-    line-height: 20px; /* Adjust proportionally */
-  }
+.clothes-section__suggestions {
+  margin-top: 10px;
+}
 
-  .clothes-section__button {
-    font-size: 16px;
-    line-height: 20px;
+.clothes-section__suggested-list {
+  list-style-type: none;
+  display: grid;
+  grid-gap: 20px 20px;
+  grid-template-columns: repeat(auto-fit, minmax(323px, 1fr));
+  grid-template-rows: auto;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  max-width: 100%;
+}
+
+@media screen and (max-width: 375px) {
+  .clothes-section__list,
+  .clothes-section__suggested-list {
+    padding: 0;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 16px 15px;
+    padding-bottom: 20px;
+    margin: 0 auto;
   }
 }

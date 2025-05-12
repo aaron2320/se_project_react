@@ -1,27 +1,62 @@
-@font-face {
-  font-family: "Cabinet Grotesk";
-  src: url("../../vendor/fonts/CabinetGrotesk-Regular.woff") format("woff");
+.sidebar__profile {
+  padding: 20px;
 }
 
-.sidebar {
-  display: flex !important; /* Increase specificity to prevent overrides */
-  flex-direction: row !important;
-  flex-wrap: nowrap !important;
-  align-items: center !important;
-  gap: 16px;
-  min-width: 200px;
+.sidebar__profile-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
 }
-
 .sidebar__avatar {
-  width: 50px; /* Ensure the avatar has a defined size */
-  height: 50px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
+  background-color: #000;
+  color: white;
+  font-family: CabinetGrotesk, sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  text-align: center;
+  line-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar__avatar-image {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #000;
+  color: white;
+  font-family: CabinetGrotesk, sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  text-align: center;
+  line-height: 56px;
 }
 
 .sidebar__username {
-  font-family: "Cabinet Grotesk", "Arial", sans-serif;
+  font-family: CabinetGrotesk, sans-serif;
   font-weight: 700;
   font-size: 20px;
-  line-height: 24px;
-  letter-spacing: 0%;
+}
+
+.sidebar__profile-actions-btn {
+  flex-direction: column;
+  background: none;
+  gap: 8px;
+  font-family: CabinetGrotesk, sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  text-align: left;
+  white-space: nowrap;
+}
+.sidebar__profile-actions button:hover {
+  opacity: 0.6;
 }

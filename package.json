@@ -1,9 +1,9 @@
 {
-  "name": "se_project_react-main",
+  "name": "se_project_react",
+  "homepage": "https://aaron2320.github.io/se_project_react/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://aaron2320.github.io/se_project_react/",
   "scripts": {
     "dev": "vite --open",
     "build": "vite build",
@@ -22,9 +22,10 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "eslint": "^8.57.0",
-    "eslint-plugin-react": "^7.34.3",
+    "eslint-plugin-react": "^7.34.2",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
-    "vite": "^5.3.4"
+    "gh-pages": "^6.3.0",
+    "vite": "^6.2.0"
   }
 }

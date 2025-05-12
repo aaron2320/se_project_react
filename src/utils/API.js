@@ -1,40 +1,114 @@
-// const baseUrl = "http://localhost:3001";
+export class JsonAPI {
+  constructor() {
+    this._baseUrl = `http://127.0.0.1:3001/`;
+    this._headers = {
+      "Content-Type": "application/json",
+    };
+  }
 
-// function getItems() {
-//   return fetch(`${baseUrl}/items`).then((res) => {
-//     return res.ok ? res.json() : Promise.reject(`Error: ${res.status}`);
-//   });
-// }
+  _request(endpoint, options = {}) {
+    const finalOptions = {
+      ...options,
+      headers: {
+        ...this._headers,
+        ...(options.headers || {}),
+      },
+    };
+    // console.log("Making request to:", endpoint);
+    // console.log("With options:", finalOptions);
 
-// export { getItems };
+    return fetch(endpoint, finalOptions).then(this._checkResponse);
+  }
 
-import checkResponse from "./checkResponse";
+  getItems() {
+    return this._request(`${this._baseUrl}items`, { method: "GET" });
+  }
 
-const baseUrl = "http://localhost:3001";
+  postItems(data, token) {
+    return this._request(`${this._baseUrl}items`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+  }
 
-function request(url, options) {
-  return fetch(url, options).then(checkResponse);
-}
+  deleteItem(id, token) {
+    return this._request(`${this._baseUrl}items/${id}`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
 
-export function getItems() {
-  return request(`${baseUrl}/items`).then((data) =>
-    data.map((item) => ({
-      ...item,
-      _id: item._id ?? item.id,
-    }))
-  );
-}
+  _checkResponse(res) {
+    if (res.ok) {
+      return res.json();
+    }
+    return res.json().then((err) => {
+      if (err.message) {
+        throw new Error(err.message);
+      }
+      throw new Error(`Error: ${res.status}`);
+    });
+  }
 
-export function addItem(item) {
-  return request(`${baseUrl}/items`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(item),
-  }).then((data) => ({ ...data, _id: data._id ?? data.id }));
-}
+  createUser(data) {
+    // console.log("Creating user with data:", data);
+    return this._request(`${this._baseUrl}signup`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
 
-export function deleteItem(itemId) {
-  return request(`${baseUrl}/items/${itemId}`, {
-    method: "DELETE",
-  });
+  getUserInfo(token) {
+    return this._request(`${this._baseUrl}users/me`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+
+  authorize(data) {
+    // console.log("Authorizing with data:", data);
+    return this._request(`${this._baseUrl}signin`, {
+      method: "POST",
+      headers: { Accept: "application/json" },
+      body: JSON.stringify(data),
+    });
+  }
+
+  updateUserInfo(data, token) {
+    return this._request(`${this._baseUrl}users/me`, {
+      method: "PATCH",
+      headers: { Accept: "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify(data),
+    });
+  }
+
+  addCardLike(id, token) {
+    return this._request(`${this._baseUrl}items/${id}/likes`, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+
+  removeCardLike(id, token) {
+    return this._request(`${this._baseUrl}items/${id}/likes`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
 }

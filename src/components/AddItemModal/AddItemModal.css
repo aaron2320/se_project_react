@@ -21,6 +21,8 @@
 
 .modal__radio-buttons {
   margin-bottom: 25px; /* Increased spacing to match Figma */
+  border: none; /* Remove default fieldset border */
+  padding: 0;
 }
 
 .modal__legend {
@@ -30,17 +32,30 @@
   margin-bottom: 10px;
 }
 
-.modal__radio-button {
+.modal__radio-group {
   display: flex;
-  align-items: center;
-  margin-bottom: 10px; /* Increased spacing between radio buttons */
-}
-
-.modal__radio-input {
-  margin-right: 10px;
+  flex-direction: column; /* Stack radio options vertically */
+  gap: 10px; /* Spacing between radio options */
 }
 
 .modal__radio-label {
+  display: flex;
+  align-items: center; /* Align radio button and text vertically centered */
+  gap: 10px; /* Space between radio button and label text */
+  font-family: "Cabinet Grotesk", "Arial", sans-serif;
+  font-size: 16px; /* UI text style 2 */
+  font-weight: 500; /* Medium */
+  cursor: pointer;
+}
+
+.modal__radio-input {
+  width: 20px; /* Size the radio button */
+  height: 20px;
+  margin: 0; /* Remove default margin for better control */
+  accent-color: #000; /* Customize radio button color to black */
+}
+
+.modal__radio-text {
   font-family: "Cabinet Grotesk", "Arial", sans-serif;
   font-size: 16px; /* UI text style 2 */
   font-weight: 500; /* Medium */

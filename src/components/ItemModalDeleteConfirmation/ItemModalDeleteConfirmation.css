@@ -1,0 +1,44 @@
+.modal__confirm-delete {
+  display: flex;
+  flex-direction: column;
+  width: 670px;
+  height: 280px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 700;
+  font-family: CabinetGrotesk, sans-serif;
+  line-height: 24px;
+  position: relative;
+}
+.modal__close_type_image_confirmation {
+  background-image: url("../../assets/close-btn.svg");
+
+  border: none;
+  top: 24px;
+  right: 24px;
+  cursor: pointer;
+  color: #0000004d;
+}
+.modal__confirm-delete-message {
+  text-align: center;
+  margin-top: 60px;
+  margin-bottom: 0;
+}
+
+.modal__delete-card-btn {
+  cursor: pointer;
+  border: none;
+  background-color: #ffffff;
+  color: #ff4d00;
+  margin-top: 40px;
+  margin-bottom: 24px;
+}
+
+.modal__delete-card-btn_cancel {
+  cursor: pointer;
+  border: none;
+  background-color: #ffffff;
+  margin-bottom: 60px;
+}

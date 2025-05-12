@@ -1,30 +1,28 @@
 .profile {
   display: flex;
-  gap: 116px;
-  /* Remove white-space as it's not needed for flex layout; if intended to prevent wrapping, use flex-wrap on children */
+  margin: 0;
+  padding: 0;
 }
 
-/* Ensure profile__sidebar doesn't constrain its children too much */
 .profile__sidebar {
-  min-width: 220px; /* Ensure enough space for the sidebar content */
+  margin-right: 116px;
+  padding: 0;
 }
 
-/* Tablet view (768px - 1023px) */
-@media (max-width: 1023px) {
-  .profile {
-    gap: 40px;
-  }
+.profile__clothing-items {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0 auto;
+  box-sizing: border-box;
+  width: 100%;
 }
-
-/* Mobile view (≤ 767px) */
-@media (max-width: 767px) {
-  .profile {
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .profile__sidebar {
-    min-width: unset; /* Allow sidebar to take full width on mobile */
-    width: 100%;
-  }
+.profile__error-message {
+  color: #ff4d4d;
+  background-color: #ffebeb;
+  padding: 12px;
+  margin: 0 0 20px 0;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 14px;
 }
