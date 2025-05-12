@@ -1,5 +1,20 @@
-/* src/vendor/fonts/fonts.css */
 @font-face {
-  font-family: "Cabinet Grotesk";
-  src: url(src/vendpr/font/CabinetGrotesk-Regular.woff) format("woff");
+  font-family: "CabinetGrotesk";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./fonts/CabinetGrotesk-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "CabinetGrotesk";
+  font-style: normal;
+  font-weight: 500;
+  src: url("./fonts/CabinetGrotesk-Medium.woff") format("woff");
+}
+
+@font-face {
+  font-family: "CabinetGrotesk";
+  font-style: normal;
+  font-weight: 700;
+  src: url("./fonts/CabinetGrotesk-Bold.woff") format("woff");
 }

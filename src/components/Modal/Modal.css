@@ -1,0 +1,86 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.modal__container {
+  position: relative;
+  background: white;
+  border-radius: 20px;
+  padding: 24px; /* Adjust padding for better spacing */
+  max-width: 498px;
+  width: 100%;
+  display: flex;
+  flex-direction: column; /* Ensure proper stacking of content */
+  align-items: center; /* Center align content */
+}
+
+.modal__details {
+  display: flex;
+  justify-content: space-between; /* Align text and button on opposite sides */
+  width: 100%; /* Ensure it spans the full width of the modal */
+  margin-top: 16px; /* Add spacing above the details section */
+  align-items: center; /* Vertically align items */
+}
+
+.modal__weather {
+  font-size: 16px; /* Match the font size in the design */
+  font-weight: 400; /* Regular weight for the text */
+  color: #000; /* Ensure text is visible */
+}
+
+.modal__close {
+  position: absolute;
+  top: 16px; /* Adjusted for better alignment */
+  right: 16px; /* Adjusted for better alignment */
+  width: 24px; /* Adjusted size for the "X" button */
+  height: 24px;
+  background: transparent url("../../images/gray-close-icon.svg") center
+    no-repeat; /* Replace with "X" icon */
+  background-size: contain;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.2s ease; /* Add hover effect */
+  flex-direction: grid;
+}
+
+.modal__close:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
+.modal__delete {
+  align-self: flex-end; /* Align the button to the right */
+  margin: 0; /* Remove margin to align with the text */
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px; /* Adjust padding for a compact look */
+  font-size: 16px; /* Match the font size in the design */
+  font-weight: 700; /* Match the bold text style */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.modal__delete:hover {
+  background-color: darkred; /* Add hover effect */
+}
+
+.modal__delete_btn {
+  background: transparent;
+  border: none;
+  color: #ff4d00;
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}

@@ -1,35 +1,17 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import "./index.css";
+import React from "react";
+import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import App from "./components/App/App";
-import "./components/Main/Main.css";
 
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <BrowserRouter
-      basename="/se_project_react"
-      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-    >
+import App from "./components/App/App";
+import "./index.css";
+
+// Force basename to /se_project_react/ for both dev and prod to match server
+const basename = "/se_project_react";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <BrowserRouter basename={basename}>
       <App />
     </BrowserRouter>
-  </StrictMode>
+  </React.StrictMode>
 );
-// When going to GitHub instead of local data base Switch this to this.
-// import { StrictMode } from "react";
-// import { createRoot } from "react-dom/client";
-// import { HashRouter as Router } from "react-router-dom";
-// import "./index.css";
-// import App from "./components/App/App.jsx";
-// import "./components/Main/Main.css";
-//
-// createRoot(document.getElementById("root")).render(
-//  <StrictMode>
-//    <Router
-//      basename="/se_project_react"
-//      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-//>
-//      <App />
-//    </Router>
-//  </StrictMode>
-//);

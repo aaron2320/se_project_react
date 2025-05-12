@@ -1,22 +1,42 @@
-import { useContext } from "react";
 import "./ToggleSwitch.css";
-import CurrentTemperatureUnitContext from "../../contexts/CurrentTemperatureUnitContext";
+import { useContext } from "react";
+import AppContext from "../../contexts/AppContext";
 
-export default function ToggleSwitch() {
-  const { handleToggleSwitchChange, currentTemperatureUnit } = useContext(
-    CurrentTemperatureUnitContext
-  );
+function ToggleSwitch({ onColor }) {
+  const { handleToggleSwitchChange, isOn } = useContext(AppContext);
 
   return (
-    <label className="toggle-switch">
+    <>
       <input
+        checked={isOn}
         onChange={handleToggleSwitchChange}
+        className="react-switch-checkbox"
+        id={`react-switch-new`}
         type="checkbox"
-        className="toggle-switch__checkbox"
       />
-      <span className="toggle-switch__circle"></span>
-      <span className="toggle-switch__text toggle-switch__text_F">F</span>
-      <span className="toggle-switch__text toggle-switch__text_C">C</span>
-    </label>
+      <label className="react-switch-label" htmlFor={`react-switch-new`}>
+        <span className={`react-switch-button`} />
+        <p
+          style={{
+            color: !isOn ? onColor : "#00000080",
+            zIndex: 1,
+          }}
+          className="react-switch-temp"
+        >
+          F
+        </p>
+        <p
+          style={{
+            color: isOn ? onColor : "#00000080",
+            zIndex: 1,
+          }}
+          className="react-switch-temp"
+        >
+          C
+        </p>
+      </label>
+    </>
   );
 }
+
+export default ToggleSwitch;

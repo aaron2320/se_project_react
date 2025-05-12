@@ -1,64 +1,59 @@
-.toggle-switch {
+.react-switch-checkbox {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+
+.react-switch-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
   width: 56px;
   height: 28px;
-  border: 2px solid black;
-  border-radius: 20px;
-  cursor: pointer;
-  overflow: hidden;
+  background: #fff;
+  border-radius: 100px;
+  border: 2px #7e7e7e solid;
   position: relative;
-  display: inline-block;
+  transition: background-color 0.2s;
+  margin: 0 0 0 auto;
+  font-family: CabinetGrotesk, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 100%;
+  color: #00000080;
 }
 
-.toggle-switch__checkbox {
-  opacity: 0;
-  width: 0;
-  height: 0;
+.react-switch-label .react-switch-button {
+  content: "";
   position: absolute;
-}
-
-.toggle-switch__circle {
-  background-color: black;
+  /* top: 2px;
+  left: 2px; */
   width: 28px;
   height: 28px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-radius: 50%;
-  transition: all 0.5s ease;
-  z-index: 1;
+  border-radius: 20px;
+  transition: -2.5s;
+  /* transition controls the slider effect */
+  background: black;
+  box-shadow: 0 0 2px 0 rgba(10, 10, 10, 0.29);
+  margin: 0 0 0 auto;
 }
 
-/* Text styles */
-.toggle-switch__text_F,
-.toggle-switch__text_C {
-  color: gray;
-  position: absolute;
-  top: 5px;
-  font-size: 14px;
-  font-weight: bold;
-  z-index: 2;
-  transition: color 0.3s ease;
+.react-switch-checkbox:checked + .react-switch-label .react-switch-button {
+  left: calc(100% - 0px);
+  transform: translateX(-100%);
 }
 
-.toggle-switch__text_F {
-  left: 9px;
+.react-switch-label:active .react-switch-button {
+  width: 58px;
 }
 
-.toggle-switch__text_C {
-  right: 9px;
+.react-switch-label:hover {
+  border: 2px black solid;
 }
 
-/* Move the circle to the right when checked */
-.toggle-switch__checkbox:checked ~ .toggle-switch__circle {
-  left: 28px;
-}
-
-/* Highlight "F" when unchecked (circle on the left) */
-.toggle-switch__checkbox:not(:checked) ~ .toggle-switch__text_F {
-  color: white;
-}
-
-/* Highlight "C" when checked (circle on the right) */
-.toggle-switch__checkbox:checked ~ .toggle-switch__text_C {
-  color: white;
+.react-switch-temp {
+  display: flex;
+  margin: 0 auto;
+  /* z-index: 0; */
 }

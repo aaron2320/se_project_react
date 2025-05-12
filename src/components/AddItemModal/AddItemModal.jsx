@@ -1,137 +1,185 @@
+import "./AddItemModal.css";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import { useState, useEffect } from "react";
-import "./AddItemModal.css";
 
-const AddItemModal = ({ isOpen, onAddItem, onClose, modalRef }) => {
+export default function AddItemModal({
+  onClose,
+  isOpen,
+  onAddItemModalSubmit,
+}) {
   const [name, setName] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [weather, setWeather] = useState("");
-  const [showWeatherError, setShowWeatherError] = useState(false);
-  const [submitted, setSubmitted] = useState(false); // Track if form was submitted
+  const [garmentUrl, setGarmentUrl] = useState("");
+  const [tempButton, setTempButton] = useState("hot"); // Default to "hot"
+  const [hasInteracted, setHasInteracted] = useState(false); // Track user interaction
 
+  // Validation state
+  const [errors, setErrors] = useState({});
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  // Validate form only after user interaction
   useEffect(() => {
-    if (isOpen) {
-      setName("");
-      setImageUrl("");
-      setWeather("");
-      setShowWeatherError(false);
-      setSubmitted(false); // Reset on modal open
+    if (hasInteracted) {
+      const validateForm = () => {
+        const newErrors = {};
+        if (!name || name.length < 4) {
+          newErrors.name = "Name must be at least 4 characters";
+        }
+        if (!garmentUrl || !/^https?:\/\/\S+$/i.test(garmentUrl)) {
+          newErrors.garmentUrl = "Please enter a valid image URL";
+        }
+        if (!["hot", "warm", "cold"].includes(tempButton)) {
+          newErrors.tempButton = "Please select a weather type";
+        }
+        setErrors(newErrors);
+        setIsFormValid(Object.keys(newErrors).length === 0);
+      };
+      validateForm();
     }
-  }, [isOpen]);
+  }, [name, garmentUrl, tempButton, hasInteracted]);
 
-  const handleNameChange = (e) => {
+  function handleNameChange(e) {
     setName(e.target.value);
-  };
+    if (!hasInteracted) setHasInteracted(true); // Trigger validation after first change
+  }
 
-  const handleImageUrlChange = (e) => {
-    setImageUrl(e.target.value);
-  };
+  function handleImageUrlChange(e) {
+    setGarmentUrl(e.target.value);
+    if (!hasInteracted) setHasInteracted(true); // Trigger validation after first change
+  }
 
-  const handleWeatherChange = (e) => {
-    setWeather(e.target.value);
-    setShowWeatherError(false);
-  };
+  function handleTempButton(e) {
+    setTempButton(e.target.value);
+    if (!hasInteracted) setHasInteracted(true); // Trigger validation after first change
+  }
 
-  const handleSubmit = (e) => {
+  function resetForm() {
+    setName("");
+    setGarmentUrl("");
+    setTempButton("hot"); // Reset to default
+    setErrors({});
+    setIsFormValid(false);
+    setHasInteracted(false); // Reset interaction state
+  }
+
+  function handleSubmit(e) {
     e.preventDefault();
-    setSubmitted(true); // Mark form as submitted
-    if (!weather) {
-      setShowWeatherError(true);
-      return;
+    if (isFormValid || !hasInteracted) {
+      // If no interaction yet, validate on submit
+      const validateForm = () => {
+        const newErrors = {};
+        if (!name || name.length < 4) {
+          newErrors.name = "Name must be at least 4 characters";
+        }
+        if (!garmentUrl || !/^https?:\/\/\S+$/i.test(garmentUrl)) {
+          newErrors.garmentUrl = "Please enter a valid image URL";
+        }
+        if (!["hot", "warm", "cold"].includes(tempButton)) {
+          newErrors.tempButton = "Please select a weather type";
+        }
+        setErrors(newErrors);
+        setIsFormValid(Object.keys(newErrors).length === 0);
+        setHasInteracted(true); // Mark as interacted after submit attempt
+        return Object.keys(newErrors).length === 0;
+      };
+      if (validateForm()) {
+        onAddItemModalSubmit({ name, garmentUrl, tempButton }, resetForm);
+      }
+    } else if (isFormValid) {
+      onAddItemModalSubmit({ name, garmentUrl, tempButton }, resetForm);
     }
-    if (!name.trim() || !imageUrl.trim()) {
-      return; // Don't submit if name or imageUrl is empty
-    }
-    onAddItem({ name, imageUrl, weather });
-  };
-
-  const isFormValid = name.trim() && imageUrl.trim() && weather;
+  }
 
   return (
     <ModalWithForm
       title="New garment"
+      buttonText="Add garment"
       isOpen={isOpen}
       onClose={onClose}
-      modalRef={modalRef}
       onSubmit={handleSubmit}
-      buttonText="Add garment"
-      isDisabled={!isFormValid}
+      isValid={isFormValid} // Pass validation state
     >
-      <label className="modal__label" htmlFor="name">
-        Name
+      <label htmlFor="add-garment-name-input" className="modal__label">
+        Name{" "}
         <input
-          className={`modal__input ${
-            submitted && !name.trim() ? "modal__input_invalid" : ""
-          }`}
+          id="add-garment-name-input"
           type="text"
-          id="name"
-          placeholder="Name"
-          value={name}
-          onChange={handleNameChange}
-          required
-        />
-      </label>
-      <label className="modal__label" htmlFor="imageUrl">
-        Image
-        <input
           className={`modal__input ${
-            submitted && !imageUrl.trim() ? "modal__input_invalid" : ""
+            hasInteracted && errors.name ? "modal__input_invalid" : ""
           }`}
-          type="url"
-          id="imageUrl"
-          placeholder="Image URL"
-          value={imageUrl}
-          onChange={handleImageUrlChange}
+          name="name"
+          placeholder="Name"
           required
+          size="52"
+          onChange={handleNameChange}
+          value={name}
         />
+        {hasInteracted && errors.name && (
+          <div className="modal__error">{errors.name}</div>
+        )}
+      </label>
+      <label htmlFor="add-garment-link" className="modal__label">
+        Image{" "}
+        <input
+          id="add-garment-link"
+          type="url"
+          className={`modal__input ${
+            hasInteracted && errors.garmentUrl ? "modal__input_invalid" : ""
+          }`}
+          name="link"
+          placeholder="Image URL"
+          required
+          size="52"
+          value={garmentUrl}
+          onChange={handleImageUrlChange}
+        />
+        {hasInteracted && errors.garmentUrl && (
+          <div className="modal__error">{errors.garmentUrl}</div>
+        )}
       </label>
       <fieldset className="modal__radio-buttons">
-        <legend className="modal__legend">Select the weather type:</legend>
-        <label className="modal__radio-button">
-          <input
-            className="modal__radio-input"
-            type="radio"
-            id="weather-hot"
-            name="weather"
-            value="hot"
-            checked={weather === "hot"}
-            onChange={handleWeatherChange}
-            required
-          />
-          <span className="modal__radio-label">Hot</span>
-        </label>
-        <label className="modal__radio-button">
-          <input
-            className="modal__radio-input"
-            type="radio"
-            id="weather-warm"
-            name="weather"
-            value="warm"
-            checked={weather === "warm"}
-            onChange={handleWeatherChange}
-            required
-          />
-          <span className="modal__radio-label">Warm</span>
-        </label>
-        <label className="modal__radio-button">
-          <input
-            className="modal__radio-input"
-            type="radio"
-            id="weather-cold"
-            name="weather"
-            value="cold"
-            checked={weather === "cold"}
-            onChange={handleWeatherChange}
-            required
-          />
-          <span className="modal__radio-label">Cold</span>
-        </label>
-        {showWeatherError && (
-          <p className="modal__error">Please select a weather type</p>
+        <legend className="modal__legend">Select the Weather type:</legend>
+        <div className="modal__radio-group">
+          <label htmlFor="hot" className="modal__radio-label">
+            <input
+              id="hot"
+              name="climate"
+              type="radio"
+              className="modal__radio-input"
+              value="hot"
+              onChange={handleTempButton}
+              checked={tempButton === "hot"}
+            />
+            <span className="modal__radio-text">Hot</span>
+          </label>
+          <label htmlFor="warm" className="modal__radio-label">
+            <input
+              id="warm"
+              name="climate"
+              type="radio"
+              className="modal__radio-input"
+              value="warm"
+              onChange={handleTempButton}
+              checked={tempButton === "warm"}
+            />
+            <span className="modal__radio-text">Warm</span>
+          </label>
+          <label htmlFor="cold" className="modal__radio-label">
+            <input
+              id="cold"
+              name="climate"
+              type="radio"
+              className="modal__radio-input"
+              value="cold"
+              onChange={handleTempButton}
+              checked={tempButton === "cold"}
+            />
+            <span className="modal__radio-text">Cold</span>
+          </label>
+        </div>
+        {hasInteracted && errors.tempButton && (
+          <div className="modal__error">{errors.tempButton}</div>
         )}
       </fieldset>
     </ModalWithForm>
   );
-};
-
-export default AddItemModal;
+}

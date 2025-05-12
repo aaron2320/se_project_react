@@ -1,6 +1,4 @@
 .weather-card {
-  font-family: "Cabinet Grotesk", sans-serif;
-  font-weight: 700;
   position: relative;
   display: flex;
   height: 80px;
@@ -9,45 +7,57 @@
 }
 
 .weather-card__temp {
-  position: absolute;
-  margin: 0;
+  font-family: CabinetGrotesk, sans-serif;
+  font-weight: 700;
+  color: white;
   font-size: 36px;
   line-height: 40px;
+  margin: 0;
+  position: absolute;
   top: 20px;
   left: 16px;
-  color: #fff;
+  z-index: 1; /* Ensure text is above the image */
 }
 
 .weather-card__img {
   object-fit: cover;
   object-position: right top;
   width: 100%;
+  height: 100%;
 }
 
-/* Tablet view (768px - 1023px) */
-@media (max-width: 1023px) {
-  .weather-card {
-    height: 70px;
-  }
-
-  .weather-card__temp {
-    font-size: 32px;
-    line-height: 36px;
-    top: 16px;
-    left: 12px;
-  }
+.weather-card__type {
+  font-family: CabinetGrotesk, sans-serif;
+  font-weight: 500;
+  color: white;
+  font-size: 16px;
+  line-height: 20px;
+  margin: 0;
+  position: absolute;
+  top: 60px; /* Position below the temperature */
+  left: 16px;
+  text-transform: capitalize;
+  z-index: 1; /* Ensure text is above the image */
 }
 
-/* Mobile view (≤ 767px) */
-@media (max-width: 767px) {
+@media screen and (max-width: 375px) {
   .weather-card {
-    height: 60px;
+    position: absolute;
+    top: 134px;
+    right: 16px;
+    left: 16px;
+    margin-top: 16px;
   }
 
   .weather-card__temp {
     font-size: 28px;
     line-height: 32px;
-    top: 14px;
-    left: 10px;
+    top: 16px;
+  }
+
+  .weather-card__type {
+    font-size: 14px;
+    line-height: 18px;
+    top: 48px;
   }
 }

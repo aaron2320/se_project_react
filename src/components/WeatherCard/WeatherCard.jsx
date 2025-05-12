@@ -1,31 +1,68 @@
-import { useContext } from "react";
-import { weatherTypes } from "../../utils/constants";
-import CurrentTemperatureUnitContext from "../../contexts/CurrentTemperatureUnitContext";
+import sunny from "../../assets/sunny.svg";
+import nightStorm from "../../assets/nightstorm.png";
+import nightSnow from "../../assets/nightsnow.png";
+import nightRain from "../../assets/nightrain.png";
+import nightFog from "../../assets/nightfog.png";
+import nightCloudy from "../../assets/nightcloudy.png";
+import nightClear from "../../assets/nightclear.png";
+import dayStorm from "../../assets/daystorm.png";
+import daySnow from "../../assets/daysnow.png";
+import dayRain from "../../assets/dayrain.png";
+import dayFog from "../../assets/dayfog.png";
+import dayCloudy from "../../assets/daycloudy.png";
+import dayClear from "../../assets/dayclear.svg";
 import "./WeatherCard.css";
+import AppContext from "../../contexts/AppContext";
+import { useContext } from "react";
 
-function WeatherCard({ temp, isDay, condition }) {
-  const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext);
+function WeatherCard({ weatherData }) {
+  const { currentTemperatureUnit, isOn } = useContext(AppContext);
 
-  const filteredType = weatherTypes.filter((type) => {
-    return type.day === isDay && type.condition === condition;
-  });
+  // Default values if weatherData is not fully loaded
+  const temp = weatherData?.temp
+    ? isOn
+      ? weatherData.temp.C
+      : weatherData.temp.F
+    : "N/A";
+  const weatherType = weatherData?.type || "unknown";
+  const isDay = weatherData?.isDay ?? true; // Use nullish coalescing for safer default
 
-  const weatherType = filteredType[0];
-  const weatherTypeUrl = filteredType[0]?.url;
-  const weatherTypeCondition = filteredType[0]?.condition;
+  // Log for debugging
+  console.log("WeatherCard Weather Data:", weatherData);
+  console.log("WeatherCard Type:", weatherType);
+  console.log("WeatherCard Is Day:", isDay);
+
+  // Map weather types to corresponding images based on day/night and condition
+  const weatherImages = {
+    sunny: dayClear,
+    "sunny with clouds": dayCloudy,
+    "night time": nightClear,
+    "night time with clouds": nightCloudy,
+    cloudy: isDay ? dayCloudy : nightCloudy,
+    raining: isDay ? dayRain : nightRain,
+    fog: isDay ? dayFog : nightFog,
+    snowing: isDay ? daySnow : nightSnow,
+    hot: dayClear,
+    warm: dayClear,
+    cold: isDay ? dayCloudy : nightCloudy,
+    unknown: isDay ? dayCloudy : nightCloudy,
+  };
+
+  const weatherImage =
+    weatherImages[weatherType.toLowerCase()] ||
+    (isDay ? dayCloudy : nightCloudy);
 
   return (
     <section className="weather-card">
       <p className="weather-card__temp">
-        {temp[currentTemperatureUnit]}° {currentTemperatureUnit}
+        {temp}°{currentTemperatureUnit}
       </p>
       <img
+        src={weatherImage}
+        alt={`${weatherType} Weather`}
         className="weather-card__img"
-        src={weatherType?.url}
-        alt={`card showing ${weatherType?.day ? "day" : "night"} time ${
-          weatherType?.condition
-        } weather`}
       />
+      <p className="weather-card__type">{weatherType}</p>
     </section>
   );
 }
