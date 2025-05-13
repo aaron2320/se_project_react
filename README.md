@@ -33,3 +33,9 @@ Clone the repository to your local machine:
 Setup weather from this API location https://home.openweathermap.org/
 
 GitHub public page https://aaron2320.github.io/se_project_react/
+
+## Links
+
+- Link to the project Backend se_project_express backend server on GH Pages: [(https://github.com/aaron2320/se_project_express.git)]
+
+- Link to the project Frontend se_project_react on GH Pages: [(https://github.com/aaron2320/se_project_react.git)]
