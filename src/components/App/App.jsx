@@ -1,3 +1,4 @@
+// App.jsx
 import { useState, useEffect } from "react";
 import {
   Routes,
@@ -12,7 +13,6 @@ import Header from "../Header/Header";
 import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
 import ItemModal from "../ItemModal/ItemModal";
-import WeatherAPI from "../../utils/weatherApi";
 import Profile from "../Profile/Profile";
 import AddItemModal from "../AddItemModal/AddItemModal";
 import RegisterModal from "../RegisterModal/RegisterModal";
@@ -23,10 +23,20 @@ import { getToken, setToken } from "../../utils/token";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import ItemModalDeleteConfirmation from "../ItemModalDeleteConfirmation/ItemModalDeleteConfirmation";
 import EditProfileModal from "../EditProfileModal/EditProfileModal";
-import { JsonAPI } from "../../utils/api";
-
-const weatherApi = new WeatherAPI();
-const jsonServerApi = new JsonAPI();
+import {
+  getItems,
+  postItems,
+  deleteItem,
+  addCardLike,
+  removeCardLike,
+} from "../../utils/api";
+import {
+  createUser,
+  authorize,
+  getUserInfo,
+  updateUserInfo,
+} from "../../utils/auth";
+import { getWeather, filterWeatherData } from "../../utils/weatherApi"; // Updated import
 
 function App() {
   const [weatherData, setWeatherData] = useState({
@@ -53,11 +63,9 @@ function App() {
 
   // Function to fetch items from the database
   const fetchClothingItems = () => {
-    jsonServerApi
-      .getItems()
+    getItems()
       .then((data) => {
         setClothingItems(data || []);
-        console.log("Fetched Clothing Items:", data); // Debug log
       })
       .catch((err) => console.error("Error fetching items:", err));
   };
@@ -67,12 +75,10 @@ function App() {
   }, []);
 
   useEffect(() => {
-    weatherApi
-      .getWeather()
+    getWeather()
       .then((data) => {
-        const filteredWeatherData = weatherApi.filterWeatherData(data);
-        setWeatherData(filteredWeatherData);
-        console.log("Updated Weather Data State:", filteredWeatherData);
+        const filteredData = filterWeatherData(data);
+        setWeatherData(filteredData);
       })
       .catch((err) => console.error("Error fetching weather:", err));
   }, []);
@@ -83,8 +89,7 @@ function App() {
       setIsLoading(false);
       return;
     }
-    jsonServerApi
-      .getUserInfo(jwt)
+    getUserInfo(jwt)
       .then((data) => {
         setIsLoggedIn(true);
         setCurrentUser({
@@ -108,14 +113,11 @@ function App() {
       !items ||
       items.length === 0
     ) {
-      console.log("Invalid input for suggestions:", { weather, items });
       return items || [];
     }
 
-    console.log("Weather Data in Suggestions:", weather);
     const temp = weather.temp.F;
     const weatherType = weather.type.toLowerCase();
-    console.log("Temp (F):", temp, "Type:", weatherType);
 
     let suggestions = [];
     if (weatherType.includes("sunny") || weatherType.includes("night time")) {
@@ -247,18 +249,11 @@ function App() {
         );
     }
 
-    console.log("Suggested Keywords:", suggestions);
-    console.log(
-      "Sample Item Names:",
-      items.slice(0, 5).map((item) => item.name)
-    );
-
     const filteredItems = items.filter((item) =>
       suggestions.some((suggestion) =>
         item.name.toLowerCase().includes(suggestion)
       )
     );
-    console.log("Filtered Items:", filteredItems);
     return filteredItems.length > 0 ? filteredItems : items;
   };
 
@@ -289,8 +284,7 @@ function App() {
 
   function handleDeleteCard() {
     const token = getToken();
-    jsonServerApi
-      .deleteItem(selectedCard._id, token)
+    deleteItem(selectedCard._id, token)
       .then(() => {
         setClothingItems(
           clothingItems.filter((item) => item._id !== selectedCard._id)
@@ -318,10 +312,8 @@ function App() {
     resetForm
   ) {
     const token = getToken();
-    jsonServerApi
-      .postItems({ name, imageUrl: garmentUrl, weather: tempButton }, token)
+    postItems({ name, imageUrl: garmentUrl, weather: tempButton }, token)
       .then((data) => {
-        console.log("New Item Added:", data); // Debug log
         // Instead of appending, re-fetch the entire list to ensure consistency
         return fetchClothingItems();
       })
@@ -331,13 +323,12 @@ function App() {
   }
 
   function handleRegistration({ name, email, password, avatar }) {
-    return jsonServerApi
-      .createUser({ name, email, password, avatar })
-      .then((response) => jsonServerApi.authorize({ email, password }))
+    return createUser({ name, email, password, avatar })
+      .then((response) => authorize({ email, password }))
       .then((data) => {
         if (data.token || data.data?.token) {
           setToken(data.token || data.data.token);
-          return jsonServerApi.getUserInfo(data.token || data.data.token);
+          return getUserInfo(data.token || data.data.token);
         }
       })
       .then((userinfo) => {
@@ -365,12 +356,11 @@ function App() {
 
   function handleLogin({ email, password }) {
     if (!email || !password) return;
-    jsonServerApi
-      .authorize({ email, password })
+    authorize({ email, password })
       .then((data) => {
         if (data.token || data.data?.token) {
           setToken(data.token || data.data.token);
-          return jsonServerApi.getUserInfo(data.token || data.data.token);
+          return getUserInfo(data.token || data.data.token);
         }
       })
       .then((data) => {
@@ -400,9 +390,8 @@ function App() {
 
   const handleUpdateProfile = ({ name, avatar }) => {
     const token = getToken();
-    return jsonServerApi
-      .updateUserInfo({ name, avatar }, token)
-      .then(() => jsonServerApi.getUserInfo(token))
+    return updateUserInfo({ name, avatar }, token)
+      .then(() => getUserInfo(token))
       .then((data) => {
         setCurrentUser({
           username: data.name || data.data?.name || "",
@@ -425,8 +414,8 @@ function App() {
       return;
     }
     const promise = !isLiked
-      ? jsonServerApi.addCardLike(id, token)
-      : jsonServerApi.removeCardLike(id, token);
+      ? addCardLike(id, token)
+      : removeCardLike(id, token);
     promise
       .then((updatedCard) => {
         setClothingItems((cards) =>
