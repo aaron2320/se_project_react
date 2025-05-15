@@ -1,114 +1,90 @@
-export class JsonAPI {
-  constructor() {
-    this._baseUrl = `http://127.0.0.1:3001/`;
-    this._headers = {
-      "Content-Type": "application/json",
-    };
-  }
+// api.js
 
-  _request(endpoint, options = {}) {
-    const finalOptions = {
-      ...options,
-      headers: {
-        ...this._headers,
-        ...(options.headers || {}),
-      },
-    };
-    // console.log("Making request to:", endpoint);
-    // console.log("With options:", finalOptions);
+// Base configuration for API requests
+const baseUrl = `http://localhost:3001/`;
+const headers = {
+  "Content-Type": "application/json",
+};
 
-    return fetch(endpoint, finalOptions).then(this._checkResponse);
-  }
+// Generic request function to handle all API calls
+const request = async (endpoint, options = {}) => {
+  const finalOptions = {
+    ...options,
+    headers: {
+      ...headers,
+      ...(options.headers || {}),
+    },
+  };
 
-  getItems() {
-    return this._request(`${this._baseUrl}items`, { method: "GET" });
-  }
+  // Commented out for production, can be re-enabled for debugging
+  // console.log("Making request to:", endpoint);
+  // console.log("With options:", finalOptions);
 
-  postItems(data, token) {
-    return this._request(`${this._baseUrl}items`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
-    });
-  }
+  const res = await fetch(endpoint, finalOptions);
+  return checkResponse(res);
+};
 
-  deleteItem(id, token) {
-    return this._request(`${this._baseUrl}items/${id}`, {
-      method: "DELETE",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+// Response handler to check and parse API responses
+const checkResponse = async (res) => {
+  if (res.ok) {
+    return res.json();
   }
+  const err = await res.json();
+  if (err.message) {
+    throw new Error(err.message);
+  }
+  throw new Error(`Error: ${res.status}`);
+};
 
-  _checkResponse(res) {
-    if (res.ok) {
-      return res.json();
-    }
-    return res.json().then((err) => {
-      if (err.message) {
-        throw new Error(err.message);
-      }
-      throw new Error(`Error: ${res.status}`);
-    });
-  }
+// Fetch all clothing items
+export const getItems = () => {
+  return request(`${baseUrl}items`, { method: "GET" });
+};
 
-  createUser(data) {
-    // console.log("Creating user with data:", data);
-    return this._request(`${this._baseUrl}signup`, {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
-  }
+// Add a new clothing item
+export const postItems = (data, token) => {
+  return request(`${baseUrl}items`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+};
 
-  getUserInfo(token) {
-    return this._request(`${this._baseUrl}users/me`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  }
+// Delete a clothing item
+export const deleteItem = (id, token) => {
+  return request(`${baseUrl}items/${id}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
 
-  authorize(data) {
-    // console.log("Authorizing with data:", data);
-    return this._request(`${this._baseUrl}signin`, {
-      method: "POST",
-      headers: { Accept: "application/json" },
-      body: JSON.stringify(data),
-    });
-  }
+// Add a like to a clothing item
+export const addCardLike = (id, token) => {
+  return request(`${baseUrl}items/${id}/likes`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
 
-  updateUserInfo(data, token) {
-    return this._request(`${this._baseUrl}users/me`, {
-      method: "PATCH",
-      headers: { Accept: "application/json", Authorization: `Bearer ${token}` },
-      body: JSON.stringify(data),
-    });
-  }
+// Remove a like from a clothing item
+export const removeCardLike = (id, token) => {
+  return request(`${baseUrl}items/${id}/likes`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
 
-  addCardLike(id, token) {
-    return this._request(`${this._baseUrl}items/${id}/likes`, {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  }
-
-  removeCardLike(id, token) {
-    return this._request(`${this._baseUrl}items/${id}/likes`, {
-      method: "DELETE",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  }
-}
+// Note: createUser, authorize, getUserInfo, and updateUserInfo have been moved to auth.js
+// as per reviewer recommendation

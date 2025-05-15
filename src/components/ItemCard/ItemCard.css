@@ -1,23 +1,30 @@
 .itemCard {
   display: flex;
   flex-direction: column;
-  margin: 0;
   position: relative;
-  align-items: center;
+  width: 282px;
+  height: 354px;
+  background: #f5f5f5;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 .itemCard__title-heart-container {
   display: flex;
   flex-direction: row;
   position: absolute;
-  gap: 10px;
+  gap: 5px;
   top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
 }
 
 .itemCard-title {
   margin: 0;
   padding: 2px 12px;
   border-radius: 4px;
-
   font-family: CabinetGrotesk, sans-serif;
   font-weight: 700;
   font-size: 16px;
@@ -27,12 +34,11 @@
 }
 
 .itemCard-img {
-  border-radius: 20px;
-  border: solid #0000004d;
+  border-radius: 10px;
   margin: 0;
   padding: 0;
   object-fit: cover;
-  height: 325px;
+  height: 100%;
   width: 100%;
   display: block;
 }
@@ -41,6 +47,8 @@
   margin: 0;
   padding: 0;
   background-image: url(../../assets/heart.svg);
+  background-repeat: no-repeat;
+  background-position: center;
   display: inline-flex;
   border-style: none;
   background-color: transparent;
@@ -54,24 +62,42 @@
   margin: 0;
   padding: 0;
   background-image: url(../../assets/heart-liked.svg);
+  background-repeat: no-repeat;
+  background-position: center;
   display: inline-flex;
   border-style: none;
   background-color: transparent;
   width: 22px;
   height: 20px;
-  border: 1px;
   opacity: 1;
   transition: opacity 0.3s ease;
 }
+
 .itemCard-title-heart-btn:hover {
   cursor: pointer;
   opacity: 0.5;
 }
+
 @media screen and (max-width: 375px) {
-  .itemCard-img {
-    height: 161px;
+  .itemCard {
+    width: 161px;
+    height: 233px;
   }
-  .itemCard-title {
+
+  .itemCard-img {
+    height: 100%;
+  }
+
+  .itemCard__title-heart-container {
     top: 7px;
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 3px;
+  }
+
+  .itemCard-title {
+    font-size: 14px;
+    line-height: 18px;
+    padding: 2px 8px;
   }
 }

@@ -27,11 +27,6 @@ function WeatherCard({ weatherData }) {
   const weatherType = weatherData?.type || "unknown";
   const isDay = weatherData?.isDay ?? true; // Use nullish coalescing for safer default
 
-  // Log for debugging
-  console.log("WeatherCard Weather Data:", weatherData);
-  console.log("WeatherCard Type:", weatherType);
-  console.log("WeatherCard Is Day:", isDay);
-
   // Map weather types to corresponding images based on day/night and condition
   const weatherImages = {
     sunny: dayClear,
@@ -62,7 +57,6 @@ function WeatherCard({ weatherData }) {
         alt={`${weatherType} Weather`}
         className="weather-card__img"
       />
-      <p className="weather-card__type">{weatherType}</p>
     </section>
   );
 }

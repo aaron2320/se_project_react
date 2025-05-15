@@ -6,15 +6,23 @@ export default function AddItemModal({
   onClose,
   isOpen,
   onAddItemModalSubmit,
+  defaultWeatherType, // Accept the prop from App.jsx
 }) {
   const [name, setName] = useState("");
   const [garmentUrl, setGarmentUrl] = useState("");
-  const [tempButton, setTempButton] = useState("hot"); // Default to "hot"
+  const [tempButton, setTempButton] = useState("hot"); // Default to "hot" as fallback
   const [hasInteracted, setHasInteracted] = useState(false); // Track user interaction
 
   // Validation state
   const [errors, setErrors] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
+
+  // Set tempButton to defaultWeatherType when modal opens
+  useEffect(() => {
+    if (isOpen && defaultWeatherType) {
+      setTempButton(defaultWeatherType); // Set to current weather type
+    }
+  }, [isOpen, defaultWeatherType]);
 
   // Validate form only after user interaction
   useEffect(() => {
@@ -55,7 +63,7 @@ export default function AddItemModal({
   function resetForm() {
     setName("");
     setGarmentUrl("");
-    setTempButton("hot"); // Reset to default
+    setTempButton(defaultWeatherType || "hot"); // Reset to defaultWeatherType or "hot"
     setErrors({});
     setIsFormValid(false);
     setHasInteracted(false); // Reset interaction state
