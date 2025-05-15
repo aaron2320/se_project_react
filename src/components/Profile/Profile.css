@@ -1,22 +1,25 @@
 .profile {
   display: flex;
-  margin: 0;
-  padding: 0;
+  max-width: 1005px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .profile__sidebar {
+  flex: 1;
   margin-right: 116px;
   padding: 0;
 }
 
 .profile__clothing-items {
+  flex: 3;
   display: flex;
   flex-direction: column;
   padding: 0;
-  margin: 0 auto;
+  margin: 0;
   box-sizing: border-box;
-  width: 100%;
 }
+
 .profile__error-message {
   color: #ff4d4d;
   background-color: #ffebeb;

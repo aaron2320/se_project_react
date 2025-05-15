@@ -1,4 +1,3 @@
-// App.jsx
 import { useState, useEffect } from "react";
 import {
   Routes,
@@ -13,6 +12,7 @@ import Header from "../Header/Header";
 import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
 import ItemModal from "../ItemModal/ItemModal";
+import { getWeather, filterWeatherData } from "../../utils/weatherApi";
 import Profile from "../Profile/Profile";
 import AddItemModal from "../AddItemModal/AddItemModal";
 import RegisterModal from "../RegisterModal/RegisterModal";
@@ -36,7 +36,6 @@ import {
   getUserInfo,
   updateUserInfo,
 } from "../../utils/auth";
-import { getWeather, filterWeatherData } from "../../utils/weatherApi"; // Updated import
 
 function App() {
   const [weatherData, setWeatherData] = useState({
@@ -67,7 +66,9 @@ function App() {
       .then((data) => {
         setClothingItems(data || []);
       })
-      .catch((err) => console.error("Error fetching items:", err));
+      .catch((err) => {
+        // Silently handle error to avoid console pollution
+      });
   };
 
   useEffect(() => {
@@ -77,10 +78,12 @@ function App() {
   useEffect(() => {
     getWeather()
       .then((data) => {
-        const filteredData = filterWeatherData(data);
-        setWeatherData(filteredData);
+        const filteredWeatherData = filterWeatherData(data);
+        setWeatherData(filteredWeatherData);
       })
-      .catch((err) => console.error("Error fetching weather:", err));
+      .catch((err) => {
+        // Silently handle error to avoid console pollution
+      });
   }, []);
 
   useEffect(() => {
@@ -99,11 +102,32 @@ function App() {
           _id: data._id || data.data?._id || "",
         });
       })
-      .catch((err) => console.error("Error fetching user info:", err))
+      .catch((err) => {
+        // Silently handle error to avoid console pollution
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
-  // Weather-based clothing suggestions with detailed conditions
+  // Universal submit handler
+  const handleSubmit = (request) => {
+    setIsLoading(true);
+    request()
+      .then(() => closeActiveModal())
+      .catch((err) => {
+        // Silently handle error to avoid console pollution
+      })
+      .finally(() => setIsLoading(false));
+  };
+
+  // Compute the current weather type
+  const currentWeatherType = () => {
+    const temp = weatherData.temp.F;
+    if (temp <= 66) return "cold";
+    if (temp >= 67 && temp <= 86) return "warm";
+    return "hot";
+  };
+
+  // Weather-based clothing suggestions
   const getWeatherSuggestions = (weather, items) => {
     if (
       !weather ||
@@ -120,141 +144,44 @@ function App() {
     const weatherType = weather.type.toLowerCase();
 
     let suggestions = [];
-    if (weatherType.includes("sunny") || weatherType.includes("night time")) {
-      if (temp <= 66)
-        suggestions.push(
-          "jacket",
-          "sweater",
-          "pants",
-          "coat",
-          "hoodie",
-          "scarf",
-          "beanie"
-        );
-      else if (temp >= 67 && temp <= 86)
-        suggestions.push(
-          "shirt",
-          "jacket",
-          "jeans",
-          "sneakers",
-          "loafers",
-          "sweatshirt"
-        );
-      else
-        suggestions.push(
-          "t-shirt",
-          "shorts",
-          "dress",
-          "skirt",
-          "sandals",
-          "cap",
-          "sunglasses"
-        );
-    } else if (
-      weatherType === "cloudy" ||
-      weatherType === "sunny with clouds" ||
-      weatherType === "night time with clouds"
-    ) {
-      if (temp <= 66)
-        suggestions.push(
-          "jacket",
-          "sweater",
-          "pants",
-          "coat",
-          "hoodie",
-          "scarf",
-          "beanie"
-        );
-      else if (temp >= 67 && temp <= 86)
-        suggestions.push(
-          "shirt",
-          "jacket",
-          "jeans",
-          "sneakers",
-          "loafers",
-          "sweatshirt"
-        );
-      else suggestions.push("t-shirt", "shorts", "dress");
-    } else if (weatherType === "raining") {
-      suggestions.push("raincoat", "boots");
-      if (temp <= 66)
-        suggestions.push(
-          "jacket",
-          "pants",
-          "coat",
-          "hoodie",
-          "scarf",
-          "beanie"
-        );
-    } else if (weatherType === "fog") {
-      if (temp <= 66)
-        suggestions.push(
-          "jacket",
-          "sweater",
-          "pants",
-          "coat",
-          "hoodie",
-          "scarf",
-          "beanie"
-        );
-      else
-        suggestions.push(
-          "shirt",
-          "jacket",
-          "jeans",
-          "sneakers",
-          "loafers",
-          "sweatshirt"
-        );
-    } else if (weatherType === "snowing") {
+    if (temp <= 66) {
       suggestions.push(
-        "coat",
-        "boots",
-        "scarf",
         "jacket",
         "sweater",
         "pants",
+        "coat",
         "hoodie",
+        "scarf",
         "beanie"
       );
+    } else if (temp >= 67 && temp <= 86) {
+      suggestions.push(
+        "shirt",
+        "jacket",
+        "jeans",
+        "sneakers",
+        "loafers",
+        "sweatshirt"
+      );
     } else {
-      if (temp <= 66)
-        suggestions.push(
-          "jacket",
-          "sweater",
-          "pants",
-          "coat",
-          "hoodie",
-          "scarf",
-          "beanie"
-        );
-      else if (temp >= 67 && temp <= 86)
-        suggestions.push(
-          "shirt",
-          "jacket",
-          "jeans",
-          "sneakers",
-          "loafers",
-          "sweatshirt"
-        );
-      else
-        suggestions.push(
-          "t-shirt",
-          "shorts",
-          "dress",
-          "skirt",
-          "sandals",
-          "cap",
-          "sunglasses"
-        );
+      suggestions.push(
+        "t-shirt",
+        "shorts",
+        "dress",
+        "skirt",
+        "sandals",
+        "cap",
+        "sunglasses"
+      );
     }
 
-    const filteredItems = items.filter((item) =>
-      suggestions.some((suggestion) =>
-        item.name.toLowerCase().includes(suggestion)
-      )
+    return items.filter(
+      (item) =>
+        suggestions.some((suggestion) =>
+          item.name.toLowerCase().includes(suggestion)
+        ) ||
+        item.weather === (temp <= 66 ? "cold" : temp >= 87 ? "hot" : "warm")
     );
-    return filteredItems.length > 0 ? filteredItems : items;
   };
 
   function handleCardClick(card) {
@@ -284,14 +211,13 @@ function App() {
 
   function handleDeleteCard() {
     const token = getToken();
-    deleteItem(selectedCard._id, token)
-      .then(() => {
+    handleSubmit(() =>
+      deleteItem(selectedCard._id, token).then(() =>
         setClothingItems(
           clothingItems.filter((item) => item._id !== selectedCard._id)
-        );
-      })
-      .then(() => closeActiveModal())
-      .catch((err) => console.error("Error deleting item:", err));
+        )
+      )
+    );
   }
 
   function closeActiveModal() {
@@ -307,78 +233,80 @@ function App() {
     setCurrentTemperatureUnit(currentTemperatureUnit === "F" ? "C" : "F");
   }
 
-  function handleAddItemModalSubmit(
+  const handleAddItemModalSubmit = (
     { name, garmentUrl, tempButton },
     resetForm
-  ) {
+  ) => {
     const token = getToken();
-    postItems({ name, imageUrl: garmentUrl, weather: tempButton }, token)
-      .then((data) => {
-        // Instead of appending, re-fetch the entire list to ensure consistency
-        return fetchClothingItems();
-      })
-      .then(() => closeActiveModal())
-      .then(() => resetForm())
-      .catch((err) => console.error("Error adding item:", err));
-  }
+    handleSubmit(() =>
+      postItems(
+        { name, imageUrl: garmentUrl, weather: tempButton },
+        token
+      ).then(() => fetchClothingItems())
+    ).then(() => resetForm());
+  };
 
   function handleRegistration({ name, email, password, avatar }) {
-    return createUser({ name, email, password, avatar })
-      .then((response) => authorize({ email, password }))
-      .then((data) => {
-        if (data.token || data.data?.token) {
-          setToken(data.token || data.data.token);
-          return getUserInfo(data.token || data.data.token);
-        }
-      })
-      .then((userinfo) => {
-        setCurrentUser({
-          username: userinfo.name || userinfo.data?.name || "",
-          email: userinfo.email || userinfo.data?.email || "",
-          avatar: userinfo.avatar || userinfo.data?.avatar || "",
-          _id: userinfo._id || userinfo.data?._id || "",
-        });
-        setIsLoggedIn(true);
-        closeActiveModal();
-        navigate("/");
-      })
-      .catch((error) => {
-        const message =
-          error.message || "An error occurred during registration.";
-        if (message.includes("Email already exists")) {
-          return Promise.reject(
-            "This email is already registered. Please use a different email or try logging in."
-          );
-        }
-        return Promise.reject(message);
-      });
+    return handleSubmit(() =>
+      createUser({ name, email, password, avatar })
+        .then((response) => authorize({ email, password }))
+        .then((data) => {
+          if (data.token || data.data?.token) {
+            setToken(data.token || data.data.token);
+            return getUserInfo(data.token || data.data.token);
+          }
+        })
+        .then((userinfo) => {
+          setCurrentUser({
+            username: userinfo.name || userinfo.data?.name || "",
+            email: userinfo.email || userinfo.data?.email || "",
+            avatar: userinfo.avatar || userinfo.data?.avatar || "",
+            _id: userinfo._id || userinfo.data?._id || "",
+          });
+          setIsLoggedIn(true);
+          navigate("/");
+        })
+        .then(() => {
+          if (errorMessage) setErrorMessage("");
+        })
+        .catch((error) => {
+          const message =
+            error.message || "An error occurred during registration.";
+          if (message.includes("Email already exists")) {
+            return Promise.reject(
+              "This email is already registered. Please use a different email or try logging in."
+            );
+          }
+          return Promise.reject(message);
+        })
+    );
   }
 
   function handleLogin({ email, password }) {
     if (!email || !password) return;
-    authorize({ email, password })
-      .then((data) => {
-        if (data.token || data.data?.token) {
-          setToken(data.token || data.data.token);
-          return getUserInfo(data.token || data.data.token);
-        }
-      })
-      .then((data) => {
-        setCurrentUser({
-          username: data.name || data.data?.name || "",
-          email: data.email || data.data?.email || "",
-          _id: data._id || data.data?._id || "",
-          avatar: data.avatar || data.data?.avatar || "",
-        });
-        setIsLoggedIn(true);
-        const redirectPath = location.state?.from?.pathname || "/";
-        navigate(redirectPath);
-        closeActiveModal();
-      })
-      .catch((err) => {
-        console.error(err);
-        setErrorMessage("Invalid email or password");
-      });
+    handleSubmit(() =>
+      authorize({ email, password })
+        .then((data) => {
+          if (data.token || data.data?.token) {
+            setToken(data.token || data.data.token);
+            return getUserInfo(data.token || data.data.token);
+          }
+        })
+        .then((data) => {
+          setCurrentUser({
+            username: data.name || data.data?.name || "",
+            email: data.email || data.data?.email || "",
+            _id: data._id || data.data?._id || "",
+            avatar: data.avatar || data.data?.avatar || "",
+          });
+          setIsLoggedIn(true);
+          const redirectPath = location.state?.from?.pathname || "/";
+          navigate(redirectPath);
+        })
+        .catch(() => {
+          setErrorMessage("Invalid email or password");
+        })
+    );
   }
 
   const handleLogout = () => {
@@ -390,22 +318,21 @@ function App() {
 
   const handleUpdateProfile = ({ name, avatar }) => {
     const token = getToken();
-    return updateUserInfo({ name, avatar }, token)
-      .then(() => getUserInfo(token))
-      .then((data) => {
-        setCurrentUser({
-          username: data.name || data.data?.name || "",
-          email: data.email || data.data?.email || "",
-          _id: data._id || data.data?._id || "",
-          avatar: data.avatar || data.data?.avatar || "",
-        });
-        closeActiveModal();
-      })
-      .catch((err) => {
-        console.error(err);
-        setErrorMessage("Invalid email or avatar URL");
-        throw err;
-      });
+    handleSubmit(() =>
+      updateUserInfo({ name, avatar }, token)
+        .then(() => getUserInfo(token))
+        .then((data) => {
+          setCurrentUser({
+            username: data.name || data.data?.name || "",
+            email: data.email || data.data?.email || "",
+            _id: data._id || data.data?._id || "",
+            avatar: data.avatar || data.data?.avatar || "",
+          });
+        })
+        .catch(() => {
+          setErrorMessage("Invalid email or avatar URL");
+        })
+    );
   };
 
   const handleCardLike = ({ id, isLiked }) => {
@@ -422,9 +349,9 @@ function App() {
           cards.map((item) => (item._id === id ? updatedCard : item))
         );
       })
-      .catch((err) =>
-        console.error("Error liking/unliking card:", err.message || err)
-      );
+      .catch(() => {
+        // Silently handle error to avoid console pollution
+      });
   };
 
   const handleValidation = (data) => {
@@ -441,7 +368,7 @@ function App() {
     return Object.keys(errors).length === 0 ? true : errors;
   };
 
-  // Conditionally determine suggested items
+  // Compute suggested items dynamically
   const suggestedItems =
     weatherData.temp &&
     weatherData.type &&
@@ -532,6 +459,7 @@ function App() {
               isOpen={activeModal === "add-garment"}
               onClose={closeActiveModal}
               onAddItemModalSubmit={handleAddItemModalSubmit}
+              defaultWeatherType={currentWeatherType()} // Pass the current weather type
             />
             <ItemModal
               isOpen={activeModal === "preview"}

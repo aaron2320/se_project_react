@@ -17,12 +17,6 @@ function Main({
   const tempDisplay = weatherData?.temp
     ? weatherData.temp[currentTemperatureUnit]
     : "N/A";
-  const typeDisplay = weatherData?.type || "unknown";
-
-  // Log for debugging
-  console.log("Weather Data:", weatherData);
-  console.log("Clothing Items:", clothingItems);
-  console.log("Suggested Items:", suggestedItems);
 
   return (
     <main>
