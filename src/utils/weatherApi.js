@@ -1,35 +1,18 @@
-// weatherApi.js
 import { coordinates } from "./constants";
 
-// Base configuration for API requests
 const APIkey = "18a62bdc9af76694d30b50e1e3095c55";
 const baseUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${coordinates.latitude}&lon=${coordinates.longitude}&units=imperial&appid=${APIkey}`;
-const headers = {
-  authorization: APIkey,
-  "Content-Type": "application/json",
-};
-
-// Generic request function to handle API calls
-const request = async (endpoint, options = {}) => {
-  const finalOptions = {
-    ...options,
-  };
-
-  const res = await fetch(endpoint, finalOptions);
-  return checkResponse(res);
-};
-
-// Response handler to check and parse API responses
-const checkResponse = async (res) => {
-  if (res.ok) {
-    return res.json();
-  }
-  return Promise.reject(`Error: ${res.status}`);
-};
 
 // Fetch weather data from OpenWeatherMap API
 export const getWeather = () => {
-  return request(baseUrl, { method: "GET" });
+  return fetch(baseUrl)
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Error: ${res.status}`);
+    })
+    .catch((err) => Promise.reject(err));
 };
 
 // Filter and process weather data for the app

@@ -7,7 +7,8 @@ const headers = {
 };
 
 // Generic request function to handle all API calls
-const request = async (endpoint, options = {}) => {
+export const request = async (endpoint, options = {}) => {
+  // Added 'export' keyword
   const finalOptions = {
     ...options,
     headers: {
@@ -25,7 +26,7 @@ const request = async (endpoint, options = {}) => {
 };
 
 // Response handler to check and parse API responses
-const checkResponse = async (res) => {
+export const checkResponse = async (res) => {
   if (res.ok) {
     return res.json();
   }
