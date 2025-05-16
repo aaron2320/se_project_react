@@ -9,9 +9,9 @@ function ClothesSection({
   suggestedItems,
   weatherData,
 }) {
-  // Filter clothingItems to exclude items already in suggestedItems
-  const nonSuggestedItems = clothingItems.filter(
-    (item) => !suggestedItems.some((suggested) => suggested._id === item._id)
+  // Sort clothingItems by _id in descending order to show new items first
+  const sortedClothingItems = [...clothingItems].sort((a, b) =>
+    b._id.localeCompare(a._id)
   );
 
   return (
@@ -22,25 +22,10 @@ function ClothesSection({
           + Add New
         </button>
       </div>
-      {suggestedItems && suggestedItems.length > 0 && (
-        <div className="clothes-section__suggestions">
-          <h3>Suggested for Today:</h3>
-          <ul className="clothes-section__suggested-list">
-            {suggestedItems.map((item) => (
-              <li key={item._id}>
-                <ItemCard
-                  item={item}
-                  onCardClick={onCardClick}
-                  handleCardLike={handleCardLike}
-                />
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+
       <ul className="clothes-section__list">
-        {nonSuggestedItems.length > 0 ? (
-          nonSuggestedItems.map((item) => (
+        {sortedClothingItems.length > 0 ? (
+          sortedClothingItems.map((item) => (
             <li key={item._id}>
               <ItemCard
                 item={item}
@@ -50,7 +35,7 @@ function ClothesSection({
             </li>
           ))
         ) : (
-          <li>No additional items to display.</li>
+          <li>No items to display.</li>
         )}
       </ul>
     </div>
