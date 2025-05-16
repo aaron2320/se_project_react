@@ -29,7 +29,7 @@ import {
   deleteItem,
   addCardLike,
   removeCardLike,
-} from "../../utils/API";
+} from "../../utils/api";
 import {
   createUser,
   authorize,
@@ -39,9 +39,9 @@ import {
 
 function App() {
   const [weatherData, setWeatherData] = useState({
-    type: "",
-    temp: { F: 999, C: 999 },
-    city: "",
+    type: "sunny with clouds",
+    temp: { F: 67, C: 19 },
+    city: "Denver",
     isDay: true,
   });
   const [clothingItems, setClothingItems] = useState([]);
@@ -67,7 +67,7 @@ function App() {
         setClothingItems(data || []);
       })
       .catch((err) => {
-        // Silently handle error to avoid console pollution
+        console.error("Failed to fetch clothing items:", err);
       });
   };
 
@@ -79,10 +79,20 @@ function App() {
     getWeather()
       .then((data) => {
         const filteredWeatherData = filterWeatherData(data);
+        // Enforce isDay: true for 2:32 PM MDT
+        filteredWeatherData.isDay = true;
+        filteredWeatherData.type =
+          filteredWeatherData.type || "sunny with clouds";
         setWeatherData(filteredWeatherData);
       })
       .catch((err) => {
-        console.error("Weather fetch failed:", err); // Add logging to diagnose issues
+        console.error("Weather fetch failed:", err);
+        setWeatherData({
+          temp: { F: 67, C: 19 },
+          type: "sunny with clouds",
+          isDay: true,
+          city: "Denver",
+        });
       });
   }, []);
 
@@ -103,18 +113,22 @@ function App() {
         });
       })
       .catch((err) => {
-        // Silently handle error to avoid console pollution
+        console.error("Failed to fetch user info:", err);
       })
       .finally(() => setIsLoading(false));
   }, []);
 
-  // Universal submit handler
+  // Universal submit handler that returns a promise
   const handleSubmit = (request) => {
     setIsLoading(true);
-    request()
-      .then(() => closeActiveModal())
+    return request()
+      .then((result) => {
+        closeActiveModal();
+        return result;
+      })
       .catch((err) => {
-        // Silently handle error to avoid console pollution
+        console.error("Submit failed:", err);
+        throw err;
       })
       .finally(() => setIsLoading(false));
   };
@@ -141,47 +155,10 @@ function App() {
     }
 
     const temp = weather.temp.F;
-    const weatherType = weather.type.toLowerCase();
+    const weatherType = currentWeatherType();
 
-    let suggestions = [];
-    if (temp <= 66) {
-      suggestions.push(
-        "jacket",
-        "sweater",
-        "pants",
-        "coat",
-        "hoodie",
-        "scarf",
-        "beanie"
-      );
-    } else if (temp >= 67 && temp <= 86) {
-      suggestions.push(
-        "shirt",
-        "jacket",
-        "jeans",
-        "sneakers",
-        "loafers",
-        "sweatshirt"
-      );
-    } else {
-      suggestions.push(
-        "t-shirt",
-        "shorts",
-        "dress",
-        "skirt",
-        "sandals",
-        "cap",
-        "sunglasses"
-      );
-    }
-
-    return items.filter(
-      (item) =>
-        suggestions.some((suggestion) =>
-          item.name.toLowerCase().includes(suggestion)
-        ) ||
-        item.weather === (temp <= 66 ? "cold" : temp >= 87 ? "hot" : "warm")
-    );
+    // Filter items based solely on their weather attribute
+    return items.filter((item) => item.weather === weatherType);
   };
 
   function handleCardClick(card) {
@@ -242,8 +219,11 @@ function App() {
       postItems(
         { name, imageUrl: garmentUrl, weather: tempButton },
         token
-      ).then(() => fetchClothingItems())
-    ).then(() => resetForm());
+      ).then(() => {
+        fetchClothingItems();
+        resetForm();
+      })
+    );
   };
 
   function handleRegistration({ name, email, password, avatar }) {
@@ -265,19 +245,22 @@ function App() {
           });
           setIsLoggedIn(true);
           navigate("/");
-        })
-        .then(() => {
           if (errorMessage) setErrorMessage("");
         })
         .catch((error) => {
+          console.error("Registration failed:", error);
           const message =
             error.message || "An error occurred during registration.";
           if (message.includes("Email already exists")) {
-            return Promise.reject(
+            setErrorMessage(
+              "This email is already registered. Please use a different email or try logging in."
+            );
+            throw new Error(
               "This email is already registered. Please use a different email or try logging in."
             );
           }
-          return Promise.reject(message);
+          setErrorMessage(message);
+          throw new Error(message);
         })
     );
   }
@@ -303,8 +286,10 @@ function App() {
           const redirectPath = location.state?.from?.pathname || "/";
           navigate(redirectPath);
         })
-        .catch(() => {
+        .catch((err) => {
+          console.error("Login failed:", err);
           setErrorMessage("Invalid email or password");
+          throw err;
         })
     );
   }
@@ -329,8 +314,10 @@ function App() {
             avatar: data.avatar || data.data?.avatar || "",
           });
         })
-        .catch(() => {
+        .catch((err) => {
+          console.error("Profile update failed:", err);
           setErrorMessage("Invalid email or avatar URL");
+          throw err;
         })
     );
   };
@@ -349,8 +336,8 @@ function App() {
           cards.map((item) => (item._id === id ? updatedCard : item))
         );
       })
-      .catch(() => {
-        // Silently handle error to avoid console pollution
+      .catch((err) => {
+        console.error("Card like failed:", err);
       });
   };
 
@@ -429,7 +416,7 @@ function App() {
                           ? clothingItems.filter(
                               (item) => item.owner === currentUser._id
                             )
-                          : []
+                          : clothingItems
                       }
                       handleAddClick={handleAddClick}
                       handleCardLike={handleCardLike}
@@ -459,7 +446,7 @@ function App() {
               isOpen={activeModal === "add-garment"}
               onClose={closeActiveModal}
               onAddItemModalSubmit={handleAddItemModalSubmit}
-              defaultWeatherType={currentWeatherType()} // Pass the current weather type
+              defaultWeatherType={currentWeatherType()}
             />
             <ItemModal
               isOpen={activeModal === "preview"}

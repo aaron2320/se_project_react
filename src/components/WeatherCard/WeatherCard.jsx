@@ -57,6 +57,7 @@ function WeatherCard({ weatherData }) {
         alt={`${weatherType} Weather`}
         className="weather-card__img"
       />
+      <p className="weather-card__type">{weatherType}</p>
     </section>
   );
 }
