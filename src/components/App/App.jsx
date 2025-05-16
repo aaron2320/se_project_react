@@ -29,7 +29,7 @@ import {
   deleteItem,
   addCardLike,
   removeCardLike,
-} from "../../utils/api";
+} from "../../utils/API";
 import {
   createUser,
   authorize,

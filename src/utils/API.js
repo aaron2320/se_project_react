@@ -1,4 +1,4 @@
-// api.js Adjustments
+// API.js
 
 // Base configuration for API requests
 const baseUrl = `http://localhost:3001/`;
