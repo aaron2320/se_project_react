@@ -1,10 +1,9 @@
 import "./ItemModalDeleteConfirmation.css";
-import useModalClose from "../../utils/closeModalHook";
+import useModalClose from "../../Hooks/useModalClose"; // Updated path
 
 export default function ItemModalDeleteConfirmation({
   isOpen,
   onClose,
-
   onHandleDeleteCard,
 }) {
   useModalClose(isOpen, onClose);

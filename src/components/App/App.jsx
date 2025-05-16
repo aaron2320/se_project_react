@@ -82,7 +82,7 @@ function App() {
         setWeatherData(filteredWeatherData);
       })
       .catch((err) => {
-        // Silently handle error to avoid console pollution
+        console.error("Weather fetch failed:", err); // Add logging to diagnose issues
       });
   }, []);
 
