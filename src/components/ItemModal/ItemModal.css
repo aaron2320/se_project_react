@@ -16,14 +16,23 @@
   border-top-right-radius: 20px;
 }
 
-.modal__close_type_image {
-  background-image: url("../../assets/close-btn.svg");
-  /* background-color: transparent; */
+.modal__content .modal__close_type_image {
+  background-image: url("../../assets/closewhite.svg");
+  background-color: transparent !important; /* Force transparency */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
   color: #0000004d;
   border: none;
-  top: 24px;
-  right: 24px;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  padding: 0;
 }
+
 .modal__footer {
   font-size: 20px;
   font-weight: 700;

@@ -13,14 +13,19 @@ export default function EditProfileModal({
   const [avatar, setAvatar] = useState("");
   const [errors, setErrors] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
-    const initialName = currentUser?.username || "";
-    const initialAvatar = currentUser?.avatar || "";
-    setName(initialName);
-    setAvatar(initialAvatar);
-    validateForm();
-  }, [currentUser]);
+    if (isOpen) {
+      const initialName = currentUser?.username || "";
+      const initialAvatar = currentUser?.avatar || "";
+      setName(initialName);
+      setAvatar(initialAvatar);
+      setErrors({}); // Clear errors on modal open
+      setHasInteracted(false); // Reset interaction state
+      setIsFormValid(initialName.length >= 4); // Set initial validity
+    }
+  }, [isOpen, currentUser]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -36,16 +41,19 @@ export default function EditProfileModal({
 
   function handleNameChange(e) {
     setName(e.target.value);
+    setHasInteracted(true); // Mark as interacted
     validateForm();
   }
 
   function handleAvatarChange(e) {
     setAvatar(e.target.value);
+    setHasInteracted(true); // Mark as interacted
     validateForm();
   }
 
   function handleSubmit(e) {
     e.preventDefault();
+    validateForm(); // Validate on submit
     if (isFormValid) {
       handleUpdateProfile({ name, avatar })
         .then(() => onClose())
@@ -69,14 +77,14 @@ export default function EditProfileModal({
           id="change-name-input"
           type="text"
           className={`modal__input ${
-            errors.name ? "modal__input_invalid" : ""
+            hasInteracted && errors.name ? "modal__input_invalid" : ""
           }`}
           name="name"
           required
           value={name}
           onChange={handleNameChange}
         />
-        {errors.name && (
+        {hasInteracted && errors.name && (
           <span className="modal__input_error">{errors.name}</span>
         )}
       </label>
@@ -87,12 +95,12 @@ export default function EditProfileModal({
           name="avatar"
           type="url"
           className={`modal__input ${
-            errors.avatar ? "modal__input_invalid" : ""
+            hasInteracted && errors.avatar ? "modal__input_invalid" : ""
           }`}
           value={avatar}
           onChange={handleAvatarChange}
         />
-        {errors.avatar && (
+        {hasInteracted && errors.avatar && (
           <span className="modal__input_error">{errors.avatar}</span>
         )}
       </label>
