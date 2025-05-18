@@ -2,17 +2,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Redirecting...</title>
-    <script>
-      // Redirect to the base path where React Router can handle the route
-      const path = window.location.pathname;
-      const base = "/se_project_react/";
-      // Preserve the path after the base (e.g., /profile) and redirect
-      const newPath = base + path.replace(base, "");
-      window.location.href = newPath || base;
+    <title>Single Page Apps for GitHub Pages</title>
+    <script type="text/javascript">
+      var pathSegments = window.location.pathname.split("/se_project_react/");
+      var redirectPath = "/se_project_react/";
+      if (pathSegments.length > 1 && pathSegments[1]) {
+        redirectPath += pathSegments[1];
+      }
+      window.location = redirectPath;
     </script>
   </head>
-  <body>
-    <p>Redirecting to the app...</p>
-  </body>
+  <body></body>
 </html>
