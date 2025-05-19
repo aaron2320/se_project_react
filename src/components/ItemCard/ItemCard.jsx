@@ -42,7 +42,7 @@ function ItemCard({ item, onCardClick, handleCardLike }) {
         className="itemCard-img"
         src={imageSrc}
         alt={item.name}
-        onError={(e) => (e.target.src = "https://via.placeholder.com/150")} // Fallback on error
+        onError={(e) => (e.target.src = "https://picsum.photos/150")} // Fallback on error
       />
     </div>
   );
