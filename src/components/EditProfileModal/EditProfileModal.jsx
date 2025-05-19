@@ -55,9 +55,7 @@ export default function EditProfileModal({
     e.preventDefault();
     validateForm(); // Validate on submit
     if (isFormValid) {
-      handleUpdateProfile({ name, avatar })
-        .then(() => onClose())
-        .catch((err) => console.error("Error updating profile:", err));
+      handleUpdateProfile({ name, avatar }); // Removed .then() and .catch()
     }
   }
 

@@ -16,10 +16,6 @@ function Profile({
   const { currentTemperatureUnit } = useContext(AppContext);
   const suggestedItems = getWeatherSuggestions(weatherData, clothingItems);
 
-  // Debug log to track items passed to ClothesSection
-  console.log("Profile - Clothing Items:", clothingItems);
-  console.log("Profile - Suggested Items:", suggestedItems);
-
   return (
     <div className="profile">
       <section className="profile__sidebar">
