@@ -1,16 +1,15 @@
 {
   "name": "se_project_react",
-  "homepage": "https://aaron2320.github.io/se_project_react/",
+  "homepage": "https://aaron2320.mooo.com",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --open",
-    "build": "vite build",
+    "build": "cross-env NODE_ENV=production vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "npm run build && scp -r ./dist/* aaron23_20@aaron2320.mooo.com:/home/aaron23_20/frontend"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -21,11 +20,11 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
+    "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.2",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
-    "gh-pages": "^6.3.0",
     "vite": "^6.2.0"
   }
 }
