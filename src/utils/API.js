@@ -1,14 +1,16 @@
 // API.js
 
 // Base configuration for API requests
-const baseUrl = `http://localhost:3001/`;
+const baseUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://api.aaron2320.mooo.com"
+    : "http://localhost:3001";
 const headers = {
   "Content-Type": "application/json",
 };
 
 // Generic request function to handle all API calls
 export const request = async (endpoint, options = {}) => {
-  // Added 'export' keyword
   const finalOptions = {
     ...options,
     headers: {
@@ -21,7 +23,7 @@ export const request = async (endpoint, options = {}) => {
   // console.log("Making request to:", endpoint);
   // console.log("With options:", finalOptions);
 
-  const res = await fetch(endpoint, finalOptions);
+  const res = await fetch(`${baseUrl}${endpoint}`, finalOptions);
   return checkResponse(res);
 };
 
@@ -39,12 +41,12 @@ export const checkResponse = async (res) => {
 
 // Fetch all clothing items
 export const getItems = () => {
-  return request(`${baseUrl}items`, { method: "GET" });
+  return request("/items", { method: "GET" });
 };
 
 // Add a new clothing item
 export const postItems = (data, token) => {
-  return request(`${baseUrl}items`, {
+  return request("/items", {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -56,7 +58,7 @@ export const postItems = (data, token) => {
 
 // Delete a clothing item
 export const deleteItem = (id, token) => {
-  return request(`${baseUrl}items/${id}`, {
+  return request(`/items/${id}`, {
     method: "DELETE",
     headers: {
       Accept: "application/json",
@@ -67,7 +69,7 @@ export const deleteItem = (id, token) => {
 
 // Add a like to a clothing item
 export const addCardLike = (id, token) => {
-  return request(`${baseUrl}items/${id}/likes`, {
+  return request(`/items/${id}/likes`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -78,7 +80,7 @@ export const addCardLike = (id, token) => {
 
 // Remove a like from a clothing item
 export const removeCardLike = (id, token) => {
-  return request(`${baseUrl}items/${id}/likes`, {
+  return request(`/items/${id}/likes`, {
     method: "DELETE",
     headers: {
       Accept: "application/json",
@@ -86,6 +88,3 @@ export const removeCardLike = (id, token) => {
     },
   });
 };
-
-// Note: createUser, authorize, getUserInfo, and updateUserInfo have been moved to auth.js
-// as per reviewer recommendation
